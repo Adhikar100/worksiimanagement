@@ -259,9 +259,17 @@ The creation form contains the following sections:
 
 **Step 2:** Type your message content.
 
-**Example:**
+> **Important:** Variables cannot be placed at the beginning or end of the body text. Always ensure there is text before and after each variable.
+
+**Correct Example:**
 \`\`\`plaintext
-Hello {{1}}, your order {{2}} has been shipped and will arrive by {{3}}.
+This is for the {{1}} testing, and your order {{2}} has been confirmed.
+\`\`\`
+
+**Incorrect Example:**
+\`\`\`plaintext
+{{1}}, your order has been shipped.    ❌ (Variable at the beginning)
+Your order number is {{1}}             ❌ (Variable at the end)
 \`\`\`
 
 **Character Limit:** Maximum 1024 characters for the body text.
@@ -318,13 +326,28 @@ Variables use the format: **{{number}}**
 
 **Step 4:** Continue adding text and variables as needed.
 
-**Example Template Body:**
+> **Important Rule:** Variables **cannot** be placed at the very beginning or the very end of the message body. There must always be text before and after each variable.
+
+**Correct Format:**
 \`\`\`plaintext
-Hello {{1}}, 
+This is for the {{1}} testing.
+\`\`\`
+In this example, "This is for the " comes before the variable, and " testing." comes after it.
 
-Thank you for your order {{2}}. 
+**Incorrect Formats:**
+\`\`\`plaintext
+{{1}} this is the message          ❌ (Variable at the beginning)
+This is the message {{1}}          ❌ (Variable at the end)
+{{1}}                              ❌ (Only variable, no text)
+\`\`\`
 
-Your package will be delivered on {{3}}.
+**Example Template Body (Correct):**
+\`\`\`plaintext
+Hello, dear {{1}} customer!
+
+Thank you for placing order number {{2}} with us. 
+
+Your package will be delivered on {{3}} at your address.
 
 Best regards,
 The Worksii Team
@@ -332,6 +355,7 @@ The Worksii Team
 
 ### 6.4 Variable Guidelines
 
+- **Variables must have text before AND after them** - they cannot be at the start or end of the message
 - Variables must be numbered sequentially ({{1}}, {{2}}, {{3}}...)
 - You cannot skip numbers (no {{1}} then {{3}})
 - Each variable should have a clear purpose
