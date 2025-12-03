@@ -9,9 +9,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Menu, X, ChevronRight, Home, BookOpen, Shield, Settings, HelpCircle, Download } from "lucide-react";
+import { Search, Menu, X, ChevronRight, Home, BookOpen, Shield, Settings, HelpCircle, Download, Users, ChevronDown } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoImage from "@assets/generated_images/worksii_logo_abstract.png";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 // Types for Sidebar Navigation
 interface NavItem {
@@ -21,7 +22,7 @@ interface NavItem {
 }
 
 // Extracted Sections for Navigation (Manual mapping for stability)
-const navItems: NavItem[] = [
+const userManagementItems: NavItem[] = [
   { title: "Introduction", id: "1-introduction", icon: <Home className="h-4 w-4" /> },
   { title: "Accessing User Mgmt", id: "2-accessing-user-management", icon: <BookOpen className="h-4 w-4" /> },
   { title: "User List Interface", id: "3-understanding-the-user-list-interface", icon: <BookOpen className="h-4 w-4" /> },
@@ -40,6 +41,7 @@ export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMgmtOpen, setIsUserMgmtOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = () => {
@@ -60,7 +62,7 @@ export default function Documentation() {
   // Scroll spy implementation
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map((item) => document.getElementById(item.id));
+      const sections = userManagementItems.map((item) => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 150; // Offset for header
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -126,24 +128,41 @@ export default function Documentation() {
       </div>
       <ScrollArea className="flex-1 py-4">
         <div className="px-4 space-y-1">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className={cn(
-                "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                activeSection === item.id
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-              )}
-            >
-              {item.icon}
-              {item.title}
-              {activeSection === item.id && (
-                <ChevronRight className="ml-auto h-4 w-4 text-primary" />
-              )}
-            </button>
-          ))}
+          {/* Main Module Item */}
+          <Collapsible open={isUserMgmtOpen} onOpenChange={setIsUserMgmtOpen} className="space-y-1">
+            <CollapsibleTrigger className="w-full flex items-center gap-3 px-3 py-2 text-sm font-semibold text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors group">
+              <Users className="h-4 w-4" />
+              User Management
+              <ChevronDown className={cn("ml-auto h-4 w-4 transition-transform duration-200", isUserMgmtOpen ? "transform rotate-0" : "transform -rotate-90")} />
+            </CollapsibleTrigger>
+            
+            <CollapsibleContent className="pl-4 space-y-1 border-l border-sidebar-border ml-5 my-1">
+              {userManagementItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
+                    activeSection === item.id
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  )}
+                >
+                  {/* {item.icon} - Icons removed for cleaner sub-menu look, optional */}
+                  <span className="truncate">{item.title}</span>
+                  {activeSection === item.id && (
+                    <ChevronRight className="ml-auto h-3 w-3 text-primary" />
+                  )}
+                </button>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* Example of another top-level module (placeholder) */}
+          <button className="w-full flex items-center gap-3 px-3 py-2 text-sm font-semibold text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground rounded-md transition-colors opacity-60 cursor-not-allowed">
+            <Settings className="h-4 w-4" />
+            System Settings
+          </button>
         </div>
       </ScrollArea>
       <div className="p-4 border-t border-sidebar-border">
