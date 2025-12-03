@@ -407,49 +407,77 @@ At the top of the Campaigns page, you'll find the **Filter Campaigns** panel to 
 
 Navigate to **Campaign > Static** to view all your campaigns.
 
-The campaign list shows:
+The campaign list displays in a table format:
+
+\`\`\`plaintext
+┌────┬─────────────────────┬──────────────┬─────────────────────┬─────────────────────┬─────────────────┬─────────────────┬────────┬─────────┐
+│ SN │ Campaign Name    ↕  │ Channel Type │ Creation Date    ↕  │ Last Processed   ↕  │ Campaign Status │ Total Recipients│ Status │ Actions │
+├────┼─────────────────────┼──────────────┼─────────────────────┼─────────────────────┼─────────────────┼─────────────────┼────────┼─────────┤
+│ 1  │ Adhikar Birthday112 │ Whats App    │ 03/12/2025 01:52 PM │ 03/12/2025 01:52 PM │ Processed       │ 100             │ Active │ ○ ✏️ 🗑 │
+└────┴─────────────────────┴──────────────┴─────────────────────┴─────────────────────┴─────────────────┴─────────────────┴────────┴─────────┘
+\`\`\`
+
+### 9.5 Campaign List Columns
 
 | Column | Description |
 |---|---|
-| Campaign Name | The name you assigned |
-| Template | The template being used |
-| Status | Pending, Running, Completed, Failed |
-| Schedule | When the campaign is scheduled to run |
-| Recipients | Number of recipients |
-| Actions | Edit, Pause, Delete options |
+| SN | Serial number (row number) |
+| Campaign Name ↕ | The name you assigned (sortable) |
+| Channel Type | Messaging channel: Whats App, SMS, Email, Push Notification |
+| Creation Date ↕ | Date and time campaign was created (sortable) |
+| Last Processed Date ↕ | When campaign was last executed (sortable) |
+| Campaign Status ↕ | Processing status: Pending, Processing, Processed, Failed (sortable) |
+| Total Recipients ↕ | Number of recipients in the campaign (sortable) |
+| Status | Active or Inactive toggle |
+| Actions | Toggle switch, Edit button (orange), Delete button (red) |
 
-### 9.2 Campaign Statuses
+### 9.6 Campaign Status Meanings
 
-| Status | Meaning |
-|---|---|
-| Pending | Campaign created but not yet running |
-| Scheduled | Campaign scheduled for future delivery |
-| Running | Campaign currently sending messages |
-| Completed | All messages have been sent |
-| Paused | Campaign temporarily stopped |
-| Failed | Campaign encountered an error |
+| Status | Color | Meaning |
+|---|---|---|
+| Pending | Gray | Campaign created but not yet processed |
+| Processing | Blue | Campaign currently sending messages |
+| Processed | Green | All messages have been sent successfully |
+| Failed | Red | Campaign encountered an error |
 
-### 9.3 Editing a Campaign
+### 9.7 Status Toggle
+
+The **Status** column shows an **Active/Inactive** toggle:
+
+- **Active** (green) - Campaign is enabled and will run as scheduled
+- **Inactive** (gray) - Campaign is disabled and will not run
+
+Click the toggle to change the campaign status.
+
+### 9.8 Actions Available
+
+| Action | Icon | Description |
+|---|---|---|
+| Toggle | ○ | Enable/disable the campaign |
+| Edit | ✏️ (orange) | Modify campaign settings |
+| Delete | 🗑 (red) | Permanently remove the campaign |
+
+### 9.9 Editing a Campaign
 
 **Step 1:** Find the campaign in the list.
 
-**Step 2:** Click the **"Edit"** button.
+**Step 2:** Click the orange **"Edit"** button in the Actions column.
 
 **Step 3:** Modify the campaign settings.
 
 **Step 4:** Click **"Save"** to apply changes.
 
-**Note:** Some settings may not be editable once a campaign has started running.
+**Note:** Some settings may not be editable once a campaign has been processed.
 
-### 9.4 Pausing a Campaign
+### 9.10 Deleting a Campaign
 
-**Step 1:** Find the running campaign.
+**Step 1:** Find the campaign in the list.
 
-**Step 2:** Click the **"Pause"** button.
+**Step 2:** Click the red **"Delete"** button in the Actions column.
 
-**Step 3:** The campaign will stop sending messages.
+**Step 3:** Confirm the deletion when prompted.
 
-**Step 4:** You can resume later by clicking **"Resume"**.
+**Warning:** This action is permanent and cannot be undone.
 
 ---
 
