@@ -36,50 +36,50 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: "Times New Roman", Times, serif;
+  --font-mono: "Courier New", Courier, monospace;
 }
 
 :root {
   /* Clean, Technical Documentation Theme (Light Mode) */
-  --background: 210 20% 98%; /* Very light gray/blue tint for page bg */
-  --foreground: 222 47% 11%; /* Deep readable slate */
+  --background: 0 0% 100%; /* Pure white background */
+  --foreground: 0 0% 0%; /* Pure black text */
   
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 0 0% 0%;
   
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 0 0% 0%;
   
-  --primary: 221 83% 53%; /* Vivid Tech Blue */
-  --primary-foreground: 210 40% 98%;
+  --primary: 0 0% 0%; /* Black for primary actions (classic look) */
+  --primary-foreground: 0 0% 100%;
   
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222 47% 11.2%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 0%;
   
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 40%;
   
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 0%;
   
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 0 0% 98%;
   
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221 83% 53%;
+  --border: 0 0% 85%;
+  --input: 0 0% 85%;
+  --ring: 0 0% 0%;
   
-  --radius: 0.5rem;
+  --radius: 0rem; /* Square corners for classic doc look */
   
-  --sidebar: 0 0% 100%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-primary: 240 5.9% 10%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 0%;
+  --sidebar-primary: 0 0% 10%;
   --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
+  --sidebar-accent: 0 0% 92%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-ring: 0 0% 0%;
 }
 
 .dark {
