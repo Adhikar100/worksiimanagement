@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+// @ts-ignore
+import html2pdf from "html2pdf.js";
 import { docsContent } from "@/lib/docsContent";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Menu, X, ChevronRight, Home, BookOpen, Shield, Settings, HelpCircle } from "lucide-react";
+import { Search, Menu, X, ChevronRight, Home, BookOpen, Shield, Settings, HelpCircle, Download } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoImage from "@assets/generated_images/worksii_logo_abstract.png";
 
@@ -38,6 +40,22 @@ export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPDF = () => {
+    const element = contentRef.current;
+    if (!element) return;
+
+    const opt = {
+      margin: [0.5, 0.5],
+      filename: 'Worksii-User-Management-Manual.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  };
 
   // Scroll spy implementation
   useEffect(() => {
@@ -88,7 +106,7 @@ export default function Documentation() {
             <p className="text-xs text-muted-foreground">User Management v1.0</p>
           </div>
         </div>
-        <div className="relative">
+        <div className="relative mb-4">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search docs..."
@@ -97,6 +115,14 @@ export default function Documentation() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        
+        <Button 
+          className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground" 
+          onClick={handleDownloadPDF}
+        >
+          <Download className="h-4 w-4" />
+          Download PDF
+        </Button>
       </div>
       <ScrollArea className="flex-1 py-4">
         <div className="px-4 space-y-1">
@@ -143,113 +169,125 @@ export default function Documentation() {
           </div>
           <span className="font-bold text-lg">Worksii Docs</span>
         </div>
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-80">
-            <Sidebar />
-          </SheetContent>
-        </Sheet>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={handleDownloadPDF} title="Download PDF">
+            <Download className="h-5 w-5" />
+          </Button>
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-80">
+              <Sidebar />
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
 
       {/* Main Content */}
       <main className="flex-1 md:ml-72 w-full">
         <div className="max-w-4xl mx-auto px-6 py-24 md:py-12 md:px-12">
-          <article className="prose prose-slate dark:prose-invert max-w-none">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                h1: ({ node, ...props }) => (
-                  <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-8 text-foreground scroll-m-20" {...props} />
-                ),
-                h2: ({ node, ...props }) => {
-                   // Extract ID from markdown text if it matches strict format or generic slugify
-                   const id = props.id || props.children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                   return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-border scroll-m-24 text-foreground" {...props} />
-                },
-                h3: ({ node, ...props }) => (
-                  <h3 className="text-2xl font-semibold tracking-tight mt-10 mb-4 text-foreground scroll-m-20" {...props} />
-                ),
-                h4: ({ node, ...props }) => (
-                  <h4 className="text-xl font-semibold tracking-tight mt-8 mb-4 text-foreground scroll-m-20" {...props} />
-                ),
-                p: ({ node, ...props }) => (
-                  <p className="leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground" {...props} />
-                ),
-                ul: ({ node, ...props }) => (
-                  <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-muted-foreground" {...props} />
-                ),
-                ol: ({ node, ...props }) => (
-                  <ol className="my-6 ml-6 list-decimal [&>li]:mt-2 text-muted-foreground" {...props} />
-                ),
-                blockquote: ({ node, ...props }) => (
-                  <blockquote className="mt-6 border-l-4 border-primary pl-6 italic text-muted-foreground" {...props} />
-                ),
-                code: ({ node, className, children, ...props }: any) => {
-                   const match = /language-(\w+)/.exec(className || '')
-                   const isInline = !match && !String(children).includes('\n');
-                   return isInline ? (
-                      <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground" {...props}>
-                        {children}
-                      </code>
-                   ) : (
-                      <pre className="rounded-lg border bg-muted p-4 overflow-x-auto my-6">
-                        <code className="relative rounded bg-transparent font-mono text-sm font-medium text-foreground" {...props}>
+          <div ref={contentRef}>
+            <div className="mb-12 text-center md:text-left">
+               <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">User Management Manual</h1>
+               <p className="text-xl text-muted-foreground">Comprehensive guide for Worksii Platform administrators</p>
+            </div>
+            
+            <article className="prose prose-slate dark:prose-invert max-w-none">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({ node, ...props }) => (
+                    <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-8 text-foreground scroll-m-20" {...props} />
+                  ),
+                  h2: ({ node, ...props }) => {
+                     // Extract ID from markdown text if it matches strict format or generic slugify
+                     const id = props.id || props.children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-border scroll-m-24 text-foreground" {...props} />
+                  },
+                  h3: ({ node, ...props }) => (
+                    <h3 className="text-2xl font-semibold tracking-tight mt-10 mb-4 text-foreground scroll-m-20" {...props} />
+                  ),
+                  h4: ({ node, ...props }) => (
+                    <h4 className="text-xl font-semibold tracking-tight mt-8 mb-4 text-foreground scroll-m-20" {...props} />
+                  ),
+                  p: ({ node, ...props }) => (
+                    <p className="leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground" {...props} />
+                  ),
+                  ul: ({ node, ...props }) => (
+                    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-muted-foreground" {...props} />
+                  ),
+                  ol: ({ node, ...props }) => (
+                    <ol className="my-6 ml-6 list-decimal [&>li]:mt-2 text-muted-foreground" {...props} />
+                  ),
+                  blockquote: ({ node, ...props }) => (
+                    <blockquote className="mt-6 border-l-4 border-primary pl-6 italic text-muted-foreground" {...props} />
+                  ),
+                  code: ({ node, className, children, ...props }: any) => {
+                     const match = /language-(\w+)/.exec(className || '')
+                     const isInline = !match && !String(children).includes('\n');
+                     return isInline ? (
+                        <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground" {...props}>
                           {children}
                         </code>
-                      </pre>
-                   )
-                },
-                table: ({ node, ...props }) => (
-                  <div className="my-6 w-full overflow-y-auto rounded-lg border border-border">
-                    <table className="w-full text-sm text-left" {...props} />
-                  </div>
-                ),
-                thead: ({ node, ...props }) => (
-                  <thead className="bg-muted text-muted-foreground font-medium" {...props} />
-                ),
-                th: ({ node, ...props }) => (
-                  <th className="px-4 py-3 font-medium" {...props} />
-                ),
-                td: ({ node, ...props }) => (
-                  <td className="px-4 py-3 border-t border-border" {...props} />
-                ),
-                tr: ({ node, ...props }) => (
-                  <tr className="hover:bg-muted/50 transition-colors" {...props} />
-                ),
-                hr: ({ node, ...props }) => (
-                  <hr className="my-8 border-border" {...props} />
-                ),
-                a: ({ node, href, ...props }) => {
-                  // Handle anchor links manually to ensure smooth scroll works
-                  const isAnchor = href?.startsWith('#');
-                  const handleClick = (e: React.MouseEvent) => {
-                    if (isAnchor && href) {
-                      e.preventDefault();
-                      scrollToSection(href.substring(1));
-                    }
-                  };
-                  return (
-                    <a 
-                      href={href} 
-                      onClick={handleClick}
-                      className="font-medium text-primary underline underline-offset-4 hover:text-primary/80 transition-colors" 
-                      {...props} 
-                    />
-                  );
-                }
-              }}
-            >
-              {docsContent}
-            </ReactMarkdown>
-          </article>
-          
-          <div className="mt-24 pt-8 border-t border-border flex justify-between text-sm text-muted-foreground">
-             <span>Last updated: December 2024</span>
-             <span>Worksii User Management</span>
+                     ) : (
+                        <pre className="rounded-lg border bg-muted p-4 overflow-x-auto my-6">
+                          <code className="relative rounded bg-transparent font-mono text-sm font-medium text-foreground" {...props}>
+                            {children}
+                          </code>
+                        </pre>
+                     )
+                  },
+                  table: ({ node, ...props }) => (
+                    <div className="my-6 w-full overflow-y-auto rounded-lg border border-border">
+                      <table className="w-full text-sm text-left" {...props} />
+                    </div>
+                  ),
+                  thead: ({ node, ...props }) => (
+                    <thead className="bg-muted text-muted-foreground font-medium" {...props} />
+                  ),
+                  th: ({ node, ...props }) => (
+                    <th className="px-4 py-3 font-medium" {...props} />
+                  ),
+                  td: ({ node, ...props }) => (
+                    <td className="px-4 py-3 border-t border-border" {...props} />
+                  ),
+                  tr: ({ node, ...props }) => (
+                    <tr className="hover:bg-muted/50 transition-colors" {...props} />
+                  ),
+                  hr: ({ node, ...props }) => (
+                    <hr className="my-8 border-border" {...props} />
+                  ),
+                  a: ({ node, href, ...props }) => {
+                    // Handle anchor links manually to ensure smooth scroll works
+                    const isAnchor = href?.startsWith('#');
+                    const handleClick = (e: React.MouseEvent) => {
+                      if (isAnchor && href) {
+                        e.preventDefault();
+                        scrollToSection(href.substring(1));
+                      }
+                    };
+                    return (
+                      <a 
+                        href={href} 
+                        onClick={handleClick}
+                        className="font-medium text-primary underline underline-offset-4 hover:text-primary/80 transition-colors" 
+                        {...props} 
+                      />
+                    );
+                  }
+                }}
+              >
+                {docsContent}
+              </ReactMarkdown>
+            </article>
+            
+            <div className="mt-24 pt-8 border-t border-border flex justify-between text-sm text-muted-foreground">
+               <span>Last updated: December 2024</span>
+               <span>Worksii User Management</span>
+            </div>
           </div>
         </div>
       </main>
