@@ -6,50 +6,75 @@ import html2pdf from "html2pdf.js";
 import { docsContent } from "@/lib/docsContent";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, Menu, X, ChevronRight, Home, BookOpen, Shield, Settings, HelpCircle, Download, Users, ChevronDown } from "lucide-react";
+import { 
+  Menu, 
+  ChevronRight, 
+  Download, 
+  Users, 
+  LayoutGrid, 
+  FileText, 
+  Mail, 
+  Megaphone, 
+  Database, 
+  Settings, 
+  Inbox, 
+  MessageCircle 
+} from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logoImage from "@assets/generated_images/worksii_logo_abstract.png";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-// Types for Sidebar Navigation
 interface NavItem {
   title: string;
   id: string;
-  icon?: React.ReactNode;
 }
 
-// Extracted Sections for Navigation (Manual mapping for stability)
-const userManagementItems: NavItem[] = [
-  { title: "Introduction", id: "1-introduction", icon: <Home className="h-4 w-4" /> },
-  { title: "Accessing User Mgmt", id: "2-accessing-user-management", icon: <BookOpen className="h-4 w-4" /> },
-  { title: "User List Interface", id: "3-understanding-the-user-list-interface", icon: <BookOpen className="h-4 w-4" /> },
-  { title: "Adding a New User", id: "4-adding-a-new-user", icon: <BookOpen className="h-4 w-4" /> },
-  { title: "Managing User Status", id: "5-managing-user-status", icon: <Settings className="h-4 w-4" /> },
-  { title: "Editing User Info", id: "6-editing-user-information", icon: <Settings className="h-4 w-4" /> },
-  { title: "Roles & Permissions", id: "7-user-roles-and-permissions", icon: <Shield className="h-4 w-4" /> },
-  { title: "Field Specs", id: "8-field-specifications-and-validation", icon: <BookOpen className="h-4 w-4" /> },
-  { title: "Navigation Elements", id: "9-navigation-and-interface-elements", icon: <BookOpen className="h-4 w-4" /> },
-  { title: "Troubleshooting", id: "10-troubleshooting-guide", icon: <HelpCircle className="h-4 w-4" /> },
-  { title: "Best Practices", id: "11-best-practices", icon: <Shield className="h-4 w-4" /> },
-  { title: "FAQ", id: "12-frequently-asked-questions", icon: <HelpCircle className="h-4 w-4" /> },
+interface MainMenuItem {
+  title: string;
+  icon: React.ReactNode;
+  expandable?: boolean;
+  subItems?: NavItem[];
+  disabled?: boolean;
+}
+
+const userManagementSubItems: NavItem[] = [
+  { title: "Introduction", id: "1-introduction" },
+  { title: "Accessing User Mgmt", id: "2-accessing-user-management" },
+  { title: "User List Interface", id: "3-understanding-the-user-list-interface" },
+  { title: "Adding a New User", id: "4-adding-a-new-user" },
+  { title: "Managing User Status", id: "5-managing-user-status" },
+  { title: "Editing User Info", id: "6-editing-user-information" },
+  { title: "Roles & Permissions", id: "7-user-roles-and-permissions" },
+  { title: "Field Specs", id: "8-field-specifications-and-validation" },
+  { title: "Navigation Elements", id: "9-navigation-and-interface-elements" },
+  { title: "Troubleshooting", id: "10-troubleshooting-guide" },
+  { title: "Best Practices", id: "11-best-practices" },
+  { title: "FAQ", id: "12-frequently-asked-questions" },
+];
+
+const mainMenuItems: MainMenuItem[] = [
+  { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
+  { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
+  { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems },
+  { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "Data Source", icon: <Database className="h-5 w-5" />, disabled: true },
+  { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "Unified Inbox", icon: <Inbox className="h-5 w-5" />, disabled: true },
+  { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
 ];
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isUserMgmtOpen, setIsUserMgmtOpen] = useState(true);
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({ "User Management": true });
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Filter items based on search query
-  const filteredItems = searchQuery.trim() 
-    ? userManagementItems.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : userManagementItems;
+  const toggleMenu = (title: string) => {
+    setExpandedMenus(prev => ({ ...prev, [title]: !prev[title] }));
+  };
 
   const handleDownloadPDF = () => {
     const element = contentRef.current;
@@ -66,11 +91,10 @@ export default function Documentation() {
     html2pdf().set(opt).from(element).save();
   };
 
-  // Scroll spy implementation
   useEffect(() => {
     const handleScroll = () => {
-      const sections = userManagementItems.map((item) => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 150; // Offset for header
+      const sections = userManagementSubItems.map((item) => document.getElementById(item.id));
+      const scrollPosition = window.scrollY + 150;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -88,7 +112,7 @@ export default function Documentation() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const offset = 80; // Header height
+      const offset = 80;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -104,101 +128,115 @@ export default function Documentation() {
   };
 
   const Sidebar = () => (
-    <div className="h-full flex flex-col bg-sidebar border-r border-sidebar-border">
-      <div className="p-6 border-b border-sidebar-border">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="h-10 w-10 rounded-lg overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <img src={logoImage} alt="Worksii Logo" className="h-full w-full object-cover" />
-          </div>
-          <div>
-            <h1 className="font-bold text-lg tracking-tight text-sidebar-foreground">Worksii Docs</h1>
-            <p className="text-xs text-muted-foreground">User Management v1.0</p>
-          </div>
+    <div className="h-full flex flex-col bg-white border-r border-gray-200">
+      {/* Logo */}
+      <div className="p-4 flex items-center gap-2">
+        <div className="h-8 w-8 rounded overflow-hidden flex items-center justify-center">
+          <img src={logoImage} alt="Worksii Logo" className="h-full w-full object-cover" />
         </div>
-        <div className="relative mb-4">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search docs..."
-            className="pl-9 bg-sidebar-accent/50 border-sidebar-border focus:bg-background transition-colors"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <span className="font-semibold text-lg text-gray-900">Work<span className="text-orange-500">sii</span></span>
+      </div>
+
+      {/* Navigations Label */}
+      <div className="px-4 py-2">
+        <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Navigations</span>
+      </div>
+
+      {/* Menu Items */}
+      <ScrollArea className="flex-1">
+        <div className="px-2 py-1">
+          {mainMenuItems.map((item) => (
+            <div key={item.title}>
+              {item.expandable && item.subItems ? (
+                <Collapsible 
+                  open={expandedMenus[item.title]} 
+                  onOpenChange={() => !item.disabled && toggleMenu(item.title)}
+                >
+                  <CollapsibleTrigger 
+                    className={cn(
+                      "w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors",
+                      item.disabled 
+                        ? "text-gray-400 cursor-not-allowed" 
+                        : "text-gray-700 hover:bg-gray-100"
+                    )}
+                    disabled={item.disabled}
+                  >
+                    {item.icon}
+                    <span className="flex-1 text-left">{item.title}</span>
+                    <ChevronRight 
+                      className={cn(
+                        "h-4 w-4 text-gray-400 transition-transform duration-200",
+                        expandedMenus[item.title] && "transform rotate-90"
+                      )} 
+                    />
+                  </CollapsibleTrigger>
+                  
+                  <CollapsibleContent className="ml-8 mt-1 space-y-0.5 border-l border-gray-200 pl-3">
+                    {item.subItems.map((subItem) => (
+                      <button
+                        key={subItem.id}
+                        onClick={() => scrollToSection(subItem.id)}
+                        className={cn(
+                          "w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors text-left",
+                          activeSection === subItem.id
+                            ? "bg-orange-50 text-orange-600 font-medium"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                        )}
+                      >
+                        <span className="truncate">{subItem.title}</span>
+                      </button>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              ) : (
+                <button
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors",
+                    item.disabled 
+                      ? "text-gray-400 cursor-not-allowed" 
+                      : "text-gray-700 hover:bg-gray-100"
+                  )}
+                  disabled={item.disabled}
+                >
+                  {item.icon}
+                  <span className="flex-1 text-left">{item.title}</span>
+                  {item.expandable && (
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
+                  )}
+                </button>
+              )}
+            </div>
+          ))}
         </div>
-        
+      </ScrollArea>
+
+      {/* Download Button at Bottom */}
+      <div className="p-4 border-t border-gray-200">
         <Button 
-          className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground" 
+          className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white" 
           onClick={handleDownloadPDF}
         >
           <Download className="h-4 w-4" />
           Download PDF
         </Button>
       </div>
-      <ScrollArea className="flex-1 py-4">
-        <div className="px-4 space-y-1">
-          {/* Main Module Item */}
-          <Collapsible open={isUserMgmtOpen} onOpenChange={setIsUserMgmtOpen} className="space-y-1">
-            <CollapsibleTrigger className="w-full flex items-center gap-3 px-3 py-2 text-sm font-semibold text-sidebar-foreground hover:bg-sidebar-accent rounded-md transition-colors group">
-              <Users className="h-4 w-4" />
-              User Management
-              <ChevronDown className={cn("ml-auto h-4 w-4 transition-transform duration-200", isUserMgmtOpen ? "transform rotate-0" : "transform -rotate-90")} />
-            </CollapsibleTrigger>
-            
-            <CollapsibleContent className="pl-4 space-y-1 border-l border-sidebar-border ml-5 my-1">
-              {filteredItems.length > 0 ? (
-                filteredItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
-                      activeSection === item.id
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                    )}
-                  >
-                    <span className="truncate">{item.title}</span>
-                    {activeSection === item.id && (
-                      <ChevronRight className="ml-auto h-3 w-3 text-primary" />
-                    )}
-                  </button>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-sm text-muted-foreground italic">
-                  No results found
-                </div>
-              )}
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Example of another top-level module (placeholder) */}
-          <button className="w-full flex items-center gap-3 px-3 py-2 text-sm font-semibold text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground rounded-md transition-colors opacity-60 cursor-not-allowed">
-            <Settings className="h-4 w-4" />
-            System Settings
-          </button>
-        </div>
-      </ScrollArea>
-      <div className="p-4 border-t border-sidebar-border">
-        <p className="text-xs text-center text-muted-foreground">
-          &copy; 2024 Worksii Platform
-        </p>
-      </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex">
+    <div className="min-h-screen bg-white text-gray-900 flex">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:block w-72 fixed inset-y-0 z-30">
+      <aside className="hidden md:block w-64 fixed inset-y-0 z-30">
         <Sidebar />
       </aside>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 border-b bg-background/80 backdrop-blur-md z-40 px-4 flex items-center justify-between">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 border-b bg-white z-40 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-           <div className="h-8 w-8 rounded-md overflow-hidden bg-primary/10">
+          <div className="h-8 w-8 rounded overflow-hidden">
             <img src={logoImage} alt="Worksii Logo" className="h-full w-full object-cover" />
           </div>
-          <span className="font-bold text-lg">Worksii Docs</span>
+          <span className="font-semibold text-lg">Work<span className="text-orange-500">sii</span></span>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={handleDownloadPDF} title="Download PDF">
@@ -210,7 +248,7 @@ export default function Documentation() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 w-80">
+            <SheetContent side="left" className="p-0 w-72">
               <Sidebar />
             </SheetContent>
           </Sheet>
@@ -218,81 +256,79 @@ export default function Documentation() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-72 w-full">
-        <div className="max-w-4xl mx-auto px-6 py-24 md:py-12 md:px-12">
+      <main className="flex-1 md:ml-64 w-full">
+        <div className="max-w-4xl mx-auto px-6 py-20 md:py-12 md:px-12">
           <div ref={contentRef}>
             <div className="mb-12 text-center md:text-left">
-               <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4">User Management Manual</h1>
-               <p className="text-xl text-muted-foreground">Comprehensive guide for Worksii Platform administrators</p>
+              <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 text-gray-900">User Management Manual</h1>
+              <p className="text-xl text-gray-500">Comprehensive guide for Worksii Platform administrators</p>
             </div>
             
-            <article className="prose prose-slate dark:prose-invert max-w-none">
+            <article className="prose prose-slate max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                   h1: ({ node, ...props }) => (
-                    <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-8 text-foreground scroll-m-20" {...props} />
+                    <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-8 text-gray-900 scroll-m-20" {...props} />
                   ),
                   h2: ({ node, ...props }) => {
-                     // Extract ID from markdown text if it matches strict format or generic slugify
-                     const id = props.id || props.children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-border scroll-m-24 text-foreground" {...props} />
+                    const id = props.id || props.children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
                   },
                   h3: ({ node, ...props }) => (
-                    <h3 className="text-2xl font-semibold tracking-tight mt-10 mb-4 text-foreground scroll-m-20" {...props} />
+                    <h3 className="text-2xl font-semibold tracking-tight mt-10 mb-4 text-gray-900 scroll-m-20" {...props} />
                   ),
                   h4: ({ node, ...props }) => (
-                    <h4 className="text-xl font-semibold tracking-tight mt-8 mb-4 text-foreground scroll-m-20" {...props} />
+                    <h4 className="text-xl font-semibold tracking-tight mt-8 mb-4 text-gray-900 scroll-m-20" {...props} />
                   ),
                   p: ({ node, ...props }) => (
-                    <p className="leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground" {...props} />
+                    <p className="leading-7 [&:not(:first-child)]:mt-6 text-gray-700" {...props} />
                   ),
                   ul: ({ node, ...props }) => (
-                    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-muted-foreground" {...props} />
+                    <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-gray-700" {...props} />
                   ),
                   ol: ({ node, ...props }) => (
-                    <ol className="my-6 ml-6 list-decimal [&>li]:mt-2 text-muted-foreground" {...props} />
+                    <ol className="my-6 ml-6 list-decimal [&>li]:mt-2 text-gray-700" {...props} />
                   ),
                   blockquote: ({ node, ...props }) => (
-                    <blockquote className="mt-6 border-l-4 border-primary pl-6 italic text-muted-foreground" {...props} />
+                    <blockquote className="mt-6 border-l-4 border-orange-500 pl-6 italic text-gray-600" {...props} />
                   ),
                   code: ({ node, className, children, ...props }: any) => {
-                     const match = /language-(\w+)/.exec(className || '')
-                     const isInline = !match && !String(children).includes('\n');
-                     return isInline ? (
-                        <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground" {...props}>
+                    const match = /language-(\w+)/.exec(className || '')
+                    const isInline = !match && !String(children).includes('\n');
+                    return isInline ? (
+                      <code className="relative rounded bg-gray-100 px-[0.3rem] py-[0.2rem] font-mono text-sm font-medium text-gray-900" {...props}>
+                        {children}
+                      </code>
+                    ) : (
+                      <pre className="rounded border bg-gray-50 p-4 overflow-x-auto my-6">
+                        <code className="relative rounded bg-transparent font-mono text-sm text-gray-800" {...props}>
                           {children}
                         </code>
-                     ) : (
-                        <pre className="rounded-lg border bg-muted p-4 overflow-x-auto my-6">
-                          <code className="relative rounded bg-transparent font-mono text-sm font-medium text-foreground" {...props}>
-                            {children}
-                          </code>
-                        </pre>
-                     )
+                      </pre>
+                    )
                   },
                   table: ({ node, ...props }) => (
-                    <div className="my-6 w-full overflow-y-auto rounded-lg border border-border">
+                    <div className="my-6 w-full overflow-y-auto rounded border border-gray-200">
                       <table className="w-full text-sm text-left" {...props} />
                     </div>
                   ),
                   thead: ({ node, ...props }) => (
-                    <thead className="bg-muted text-muted-foreground font-medium" {...props} />
+                    <thead className="bg-gray-50 text-gray-700 font-medium" {...props} />
                   ),
                   th: ({ node, ...props }) => (
                     <th className="px-4 py-3 font-medium" {...props} />
                   ),
                   td: ({ node, ...props }) => (
-                    <td className="px-4 py-3 border-t border-border" {...props} />
+                    <td className="px-4 py-3 border-t border-gray-200" {...props} />
                   ),
                   tr: ({ node, ...props }) => (
-                    <tr className="hover:bg-muted/50 transition-colors" {...props} />
+                    <tr className="hover:bg-gray-50 transition-colors" {...props} />
                   ),
                   hr: ({ node, ...props }) => (
-                    <hr className="my-8 border-border" {...props} />
+                    <hr className="my-8 border-gray-200" {...props} />
                   ),
                   a: ({ node, href, ...props }) => {
-                    // Handle anchor links manually to ensure smooth scroll works
                     const isAnchor = href?.startsWith('#');
                     const handleClick = (e: React.MouseEvent) => {
                       if (isAnchor && href) {
@@ -304,7 +340,7 @@ export default function Documentation() {
                       <a 
                         href={href} 
                         onClick={handleClick}
-                        className="font-medium text-primary underline underline-offset-4 hover:text-primary/80 transition-colors" 
+                        className="font-medium text-orange-600 underline underline-offset-4 hover:text-orange-500 transition-colors" 
                         {...props} 
                       />
                     );
@@ -315,9 +351,9 @@ export default function Documentation() {
               </ReactMarkdown>
             </article>
             
-            <div className="mt-24 pt-8 border-t border-border flex justify-between text-sm text-muted-foreground">
-               <span>Last updated: December 2024</span>
-               <span>Worksii User Management</span>
+            <div className="mt-24 pt-8 border-t border-gray-200 flex justify-between text-sm text-gray-500">
+              <span>Last updated: December 2024</span>
+              <span>Worksii User Management</span>
             </div>
           </div>
         </div>
