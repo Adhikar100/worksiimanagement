@@ -90,14 +90,14 @@ Login > Dashboard > Sidebar > User Management > User Management (submenu)
 
 The User Management page is divided into the following sections:
 
-| Section | Location | Description
-|-----|-----|-----
-| Header Bar | Top | Contains search, wallet balance, and profile options
-| Sidebar | Left | Main navigation menu for all Worksii modules
-| Page Title | Top Center | Displays "User Management" heading
-| Action Button | Top Right | "Add New" button to create users
-| User Table | Center | List of all users with their details
-| Pagination | Bottom | Controls for navigating through user pages
+| Section | Location | Description |
+|---|---|---|
+| Header Bar | Top | Contains search, wallet balance, and profile options |
+| Sidebar | Left | Main navigation menu for all Worksii modules |
+| Page Title | Top Center | Displays "User Management" heading |
+| Action Button | Top Right | "Add New" button to create users |
+| User Table | Center | List of all users with their details |
+| Pagination | Bottom | Controls for navigating through user pages |
 
 
 ### 3.2 User Table Columns
@@ -348,10 +348,10 @@ Once a user is successfully created:
 
 Each user account has a status that controls their ability to access the system:
 
-| Status | Toggle Position | Color | Description
-|-----|-----|-----
-| Active | ON (Right) | Green | User can log in and use the system
-| Inactive | OFF (Left) | Gray | User cannot log in; access is suspended
+| Status | Toggle Position | Color | Description |
+|---|---|---|---|
+| Active | ON (Right) | Green | User can log in and use the system |
+| Inactive | OFF (Left) | Gray | User cannot log in; access is suspended |
 
 
 ### 5.2 When to Change User Status
@@ -409,12 +409,12 @@ Each user account has a status that controls their ability to access the system:
 
 The confirmation dialog includes:
 
-| Element | Description
-|-----|-----|-----
-| Dialog Title | "Confirm Status Change"
-| Status Indicator | Shows current status being changed (e.g., "Inactive" or "Active")
-| Confirm Button | Applies the status change
-| Cancel Button | Closes dialog without making changes
+| Element | Description |
+|---|---|
+| Dialog Title | "Confirm Status Change" |
+| Status Indicator | Shows current status being changed (e.g., "Inactive" or "Active") |
+| Confirm Button | Applies the status change |
+| Cancel Button | Closes dialog without making changes |
 
 
 ### 5.5 Important Considerations
@@ -450,14 +450,14 @@ The edit function allows administrators to modify existing user information with
 
 The following fields can be modified during editing:
 
-| Field | Can Be Changed | Notes
-|-----|-----|-----
-| User Full Name | Yes | Update for legal name changes
-| User Display Name | Yes | Update for preference changes
-| Email | Yes | Caution: Changes login credentials
-| Phone Number | Yes | Include updating country code if needed
-| Country Code | Yes | Select new country from dropdown
-| Role | Yes | Changes permission level
+| Field | Can Be Changed | Notes |
+|---|---|---|
+| User Full Name | Yes | Update for legal name changes |
+| User Display Name | Yes | Update for preference changes |
+| Email | Yes | Caution: Changes login credentials |
+| Phone Number | Yes | Include updating country code if needed |
+| Country Code | Yes | Select new country from dropdown |
+| Role | Yes | Changes permission level |
 
 
 ### 6.4 Making Changes
@@ -585,68 +585,68 @@ The Worksii platform currently supports two user roles:
 
 ### 8.1 User Full Name Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Label | User Full Name *
-| Required | Yes
-| Character Type | Alphabetic, spaces, hyphens, apostrophes
-| Maximum Length | 100 characters (recommended)
-| Example | Adh Adhikar Chaudhary
+| Specification | Value |
+|---|---|
+| Field Label | User Full Name * |
+| Required | Yes |
+| Character Type | Alphabetic, spaces, hyphens, apostrophes |
+| Maximum Length | 100 characters (recommended) |
+| Example | Adh Adhikar Chaudhary |
 
 
 ### 8.2 User Display Name Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Label | User Display Name *
-| Required | Yes
-| Character Type | Alphabetic, numeric, spaces
-| Maximum Length | 50 characters (recommended)
-| Example | Adh Adhikar Chaudhary
+| Specification | Value |
+|---|---|
+| Field Label | User Display Name * |
+| Required | Yes |
+| Character Type | Alphabetic, numeric, spaces |
+| Maximum Length | 50 characters (recommended) |
+| Example | Adh Adhikar Chaudhary |
 
 
 ### 8.3 Email Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Label | Email *
-| Required | Yes
-| Format | Valid email format ([user@domain.com](mailto:user@domain.com))
-| Uniqueness | Must be unique in the system
-| Case Sensitivity | Typically case-insensitive
-| Example | adhadhikarpartner@yopr
+| Specification | Value |
+|---|---|
+| Field Label | Email * |
+| Required | Yes |
+| Format | Valid email format ([user@domain.com](mailto:user@domain.com)) |
+| Uniqueness | Must be unique in the system |
+| Case Sensitivity | Typically case-insensitive |
+| Example | adhadhikarpartner@yopr |
 
 
 ### 8.4 Phone Number Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Label | Phone
-| Required | No (optional)
-| Format | Numeric only (no spaces or dashes)
-| Country Code | Selected separately via dropdown
-| Example | 9812345678 with (+977) prefix
+| Specification | Value |
+|---|---|
+| Field Label | Phone |
+| Required | No (optional) |
+| Format | Numeric only (no spaces or dashes) |
+| Country Code | Selected separately via dropdown |
+| Example | 9812345678 with (+977) prefix |
 
 
 ### 8.5 Country Code Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Type | Dropdown with search
-| Required | Yes (if phone number is provided)
-| Search Function | Type to filter countries
-| Display Format | Country name with code
-| Example | Nepal (+977)
+| Specification | Value |
+|---|---|
+| Field Type | Dropdown with search |
+| Required | Yes (if phone number is provided) |
+| Search Function | Type to filter countries |
+| Display Format | Country name with code |
+| Example | Nepal (+977) |
 
 
 ### 8.6 Role Field
 
-| Specification | Value
-|-----|-----|-----
-| Field Type | Dropdown selection
-| Required | Yes
-| Available Options | Admin, Agent
-| Default Value | None (must be selected)
+| Specification | Value |
+|---|---|
+| Field Type | Dropdown selection |
+| Required | Yes |
+| Available Options | Admin, Agent |
+| Default Value | None (must be selected) |
 
 
 ---
@@ -657,28 +657,28 @@ The Worksii platform currently supports two user roles:
 
 The left sidebar provides access to all Worksii modules:
 
-| Menu Item | Icon | Description
-|-----|-----|-----
-| Dashboard | Home | Main overview page
-| Wallet Transactions | Wallet | Financial transactions
-| User Management | Users | Team member management
-| Messaging Service | Message | Messaging configuration
-| Campaign | Megaphone | Marketing campaigns
-| Data Source | Database | Contact data management
-| Sender Configuration | Settings | Sender ID setup
-| General Configuration | Gear | System settings
-| Unified Inbox | Inbox | Combined message inbox
-| Chatii | Chat | Real-time messaging
+| Menu Item | Icon | Description |
+|---|---|---|
+| Dashboard | Home | Main overview page |
+| Wallet Transactions | Wallet | Financial transactions |
+| User Management | Users | Team member management |
+| Messaging Service | Message | Messaging configuration |
+| Campaign | Megaphone | Marketing campaigns |
+| Data Source | Database | Contact data management |
+| Sender Configuration | Settings | Sender ID setup |
+| General Configuration | Gear | System settings |
+| Unified Inbox | Inbox | Combined message inbox |
+| Chatii | Chat | Real-time messaging |
 
 
 ### 9.2 Header Bar Elements
 
-| Element | Location | Function
-|-----|-----|-----
-| Search Bar | Center | Global search (Cmd+K shortcut)
-| Add Funds Button | Right | Top up account balance
-| Balance Display | Right | Shows current wallet balance
-| Profile Icon | Far Right | Account settings and logout
+| Element | Location | Function |
+|---|---|---|
+| Search Bar | Center | Global search (Cmd+K shortcut) |
+| Add Funds Button | Right | Top up account balance |
+| Balance Display | Right | Shows current wallet balance |
+| Profile Icon | Far Right | Account settings and logout |
 
 
 ### 9.3 Page-Specific Elements
@@ -721,71 +721,71 @@ The left sidebar provides access to all Worksii modules:
 
 **Possible Causes and Solutions:**
 
-| Cause | Solution
-|-----|-----|-----
-| Email already exists | Use a unique email address
-| Required fields empty | Fill in all fields marked with asterisk (*)
-| Invalid email format | Ensure email contains @ and valid domain
-| Session expired | Log out and log back in
-| Insufficient permissions | Contact an Admin user
+| Cause | Solution |
+|---|---|
+| Email already exists | Use a unique email address |
+| Required fields empty | Fill in all fields marked with asterisk (*) |
+| Invalid email format | Ensure email contains @ and valid domain |
+| Session expired | Log out and log back in |
+| Insufficient permissions | Contact an Admin user |
 
 
 #### Issue: User Cannot Log In
 
 **Possible Causes and Solutions:**
 
-| Cause | Solution
-|-----|-----|-----
-| Account is Inactive | Change status to Active via toggle
-| Wrong email entered | Edit user and correct email address
-| Password issues | Initiate password reset for user
-| Browser cache | Clear browser cache and cookies
+| Cause | Solution |
+|---|---|
+| Account is Inactive | Change status to Active via toggle |
+| Wrong email entered | Edit user and correct email address |
+| Password issues | Initiate password reset for user |
+| Browser cache | Clear browser cache and cookies |
 
 
 #### Issue: Status Toggle Not Working
 
 **Possible Causes and Solutions:**
 
-| Cause | Solution
-|-----|-----|-----
-| Page not fully loaded | Wait for page to load completely
-| JavaScript disabled | Enable JavaScript in browser
-| Network issue | Check internet connection
-| Session timeout | Refresh page and try again
+| Cause | Solution |
+|---|---|
+| Page not fully loaded | Wait for page to load completely |
+| JavaScript disabled | Enable JavaScript in browser |
+| Network issue | Check internet connection |
+| Session timeout | Refresh page and try again |
 
 
 #### Issue: Changes Not Saving
 
 **Possible Causes and Solutions:**
 
-| Cause | Solution
-|-----|-----|-----
-| Validation errors | Check for error messages on fields
-| Network timeout | Check connection and retry
-| Required field missing | Complete all required fields
-| Duplicate email | Use a different email address
+| Cause | Solution |
+|---|---|
+| Validation errors | Check for error messages on fields |
+| Network timeout | Check connection and retry |
+| Required field missing | Complete all required fields |
+| Duplicate email | Use a different email address |
 
 
 #### Issue: Cannot See User Management in Sidebar
 
 **Possible Causes and Solutions:**
 
-| Cause | Solution
-|-----|-----|-----
-| Insufficient role | Contact Admin for role upgrade
-| Menu collapsed | Click on User Management to expand
-| Page loading | Wait for sidebar to fully load
+| Cause | Solution |
+|---|---|
+| Insufficient role | Contact Admin for role upgrade |
+| Menu collapsed | Click on User Management to expand |
+| Page loading | Wait for sidebar to fully load |
 
 
 ### 10.2 Error Messages
 
-| Error Message | Meaning | Action
-|-----|-----|-----
-| "Email already exists" | Another user has this email | Use different email
-| "Required field" | Mandatory field is empty | Fill in the field
-| "Invalid email format" | Email syntax is incorrect | Correct the format
-| "User added successfully" | User was created | This is a success message
-| "Confirm Status Change" | Confirmation needed | Click Confirm or Cancel
+| Error Message | Meaning | Action |
+|---|---|---|
+| "Email already exists" | Another user has this email | Use different email |
+| "Required field" | Mandatory field is empty | Fill in the field |
+| "Invalid email format" | Email syntax is incorrect | Correct the format |
+| "User added successfully" | User was created | This is a success message |
+| "Confirm Status Change" | Confirmation needed | Click Confirm or Cancel |
 
 
 ---
@@ -875,13 +875,13 @@ A: Yes, phone numbers do not need to be unique, but emails must be unique.
 
 ## Document Information
 
-| Detail | Value
-|-----|-----|-----
-| Document Title | Worksii User Management User Manual
-| Version | 1.0
-| Last Updated | December 2024
-| Platform | Worksii (dev.worksii.com)
-| Applicable Module | User Management
+| Detail | Value |
+|---|---|
+| Document Title | Worksii User Management User Manual |
+| Version | 1.0 |
+| Last Updated | December 2024 |
+| Platform | Worksii (dev.worksii.com) |
+| Applicable Module | User Management |
 
 
 ---
