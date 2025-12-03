@@ -359,7 +359,51 @@ This confirms your campaign has been:
 
 ## 9. Campaign Management
 
-### 9.1 Viewing Campaigns
+### 9.1 Filter Campaigns
+
+At the top of the Campaigns page, you'll find the **Filter Campaigns** panel to search and filter your campaigns:
+
+\`\`\`plaintext
+┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  🔽 Filter Campaigns    (0 active)                                                              │
+├─────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Search          │ Status              │ Channel Type    │ Template Name    │ Date Range       │
+│  ┌─────────────┐ │ ┌─────────────────┐ │ ┌─────────────┐ │ ┌──────────────┐ │ ┌──────────────┐ │
+│  │Filter by    │ │ │All Campaign     │ │ │All Channels │ │ │Select        │ │ │Select date   │ │
+│  │name...      │ │ │Status         ▼ │ │ │           ▼ │ │ │template    ▼ │ │ │range       ▼ │ │
+│  └─────────────┘ │ └─────────────────┘ │ └─────────────┘ │ └──────────────┘ │ └──────────────┘ │
+├─────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  WhatsApp Sender                                                                                │
+│  ┌─────────────────────────┐                                                                    │
+│  │Select WhatsApp Senders ▼│        [↻ Clear All]     [🔽 Apply Filters]                        │
+│  └─────────────────────────┘                                                                    │
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### 9.2 Filter Options
+
+| Filter | Description | Options |
+|---|---|---|
+| Search | Search campaigns by name | Type campaign name to filter |
+| Status | Filter by campaign status | All Campaign Status, Pending, Running, Completed, Failed |
+| Channel Type | Filter by messaging channel | All Channels, WhatsApp, SMS, Email, Push Notification |
+| Template Name | Filter by template used | Select from your templates |
+| Date Range | Filter by creation date | Select start and end dates |
+| WhatsApp Sender | Filter by sender account | Select WhatsApp Senders |
+
+### 9.3 Using Filters
+
+**Step 1:** Enter search text or select filter options.
+
+**Step 2:** Click the blue **"Apply Filters"** button.
+
+**Step 3:** The campaign list will update to show matching results.
+
+**Step 4:** Click **"Clear All"** to reset all filters.
+
+**Note:** The "(0 active)" indicator shows how many filters are currently applied.
+
+### 9.4 Viewing Campaigns
 
 Navigate to **Campaign > Static** to view all your campaigns.
 

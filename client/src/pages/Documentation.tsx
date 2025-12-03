@@ -78,7 +78,7 @@ const campaignSubItems: NavItem[] = [
   { title: "Step 3: Template Selection", id: "cp-6-step-3-template-selection" },
   { title: "Step 4: Scheduling", id: "cp-7-step-4-scheduling-options" },
   { title: "Saving & Launching", id: "cp-8-saving-and-launching-campaign" },
-  { title: "Campaign Management", id: "cp-9-campaign-management" },
+  { title: "Filter & Management", id: "cp-9-campaign-management" },
   { title: "Troubleshooting", id: "cp-10-troubleshooting" },
 ];
 
