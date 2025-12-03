@@ -44,14 +44,21 @@ export default function Documentation() {
   const [isUserMgmtOpen, setIsUserMgmtOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Filter items based on search query
+  const filteredItems = searchQuery.trim() 
+    ? userManagementItems.filter(item => 
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : userManagementItems;
+
   const handleDownloadPDF = () => {
     const element = contentRef.current;
     if (!element) return;
 
     const opt = {
-      margin: [0.5, 0.5],
+      margin: [0.5, 0.5, 0.5, 0.5] as [number, number, number, number],
       filename: 'Worksii-User-Management-Manual.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
@@ -137,24 +144,29 @@ export default function Documentation() {
             </CollapsibleTrigger>
             
             <CollapsibleContent className="pl-4 space-y-1 border-l border-sidebar-border ml-5 my-1">
-              {userManagementItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
-                    activeSection === item.id
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                  )}
-                >
-                  {/* {item.icon} - Icons removed for cleaner sub-menu look, optional */}
-                  <span className="truncate">{item.title}</span>
-                  {activeSection === item.id && (
-                    <ChevronRight className="ml-auto h-3 w-3 text-primary" />
-                  )}
-                </button>
-              ))}
+              {filteredItems.length > 0 ? (
+                filteredItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors text-left",
+                      activeSection === item.id
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                    )}
+                  >
+                    <span className="truncate">{item.title}</span>
+                    {activeSection === item.id && (
+                      <ChevronRight className="ml-auto h-3 w-3 text-primary" />
+                    )}
+                  </button>
+                ))
+              ) : (
+                <div className="px-3 py-2 text-sm text-muted-foreground italic">
+                  No results found
+                </div>
+              )}
             </CollapsibleContent>
           </Collapsible>
 
