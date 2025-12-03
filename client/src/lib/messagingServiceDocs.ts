@@ -496,10 +496,59 @@ Before submitting, ensure:
 | Rejected | Template was not approved (see reason) |
 | Paused | Template temporarily disabled |
 
-### 8.5 After Approval
+### 8.5 After Submission - Templates List
+
+Once submitted, your template will appear in the Templates list. The Templates page displays all your templates in a table format:
+
+\`\`\`plaintext
+┌──────────────────────────────────────────────────────────────────────────────────────┐
+│  Templates                                                    [Create New]           │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│  Search...                    🔍                                                     │
+├──────────────────────────────────────────────────────────────────────────────────────┤
+│  ID            │ Template Name           │ Template Type      │ Creation Date       │ Status    │ Actions    │
+├────────────────┼─────────────────────────┼────────────────────┼─────────────────────┼───────────┼────────────┤
+│  692e8f09c...  │ bibek                   │ Push Notification  │ 02/12/2025 12:47 PM │ Pending   │ ○ Edit 🗑  │
+│  69295031b...  │ template_name           │ Push Notification  │ 28/11/2025 01:18 PM │ Approved  │ ○ Edit 🗑  │
+│  69294f25b...  │ testing_in_progress     │ Push Notification  │ 28/11/2025 01:13 PM │ Approved  │ ○ Edit 🗑  │
+│  6928306fa...  │ chiso_ma_heate_offer    │ Whats App          │ 27/11/2025 04:50 PM │ Approved  │ ○ Edit 🗑  │
+│  6926886c3...  │ happy_birthday_wishes   │ Whats App          │ 26/11/2025 10:41 AM │ Approved  │ ○ Edit 🗑  │
+│  692530ad3...  │ demo_ko_lage_           │ Whats App          │ 25/11/2025 10:14 AM │ Approved  │ ○ Edit 🗑  │
+│  6911506be...  │ 19680                   │ Email              │ 10/11/2025 08:24 AM │ Approved  │ ○ Edit 🗑  │
+│  690c858bd...  │ 19786_push_notification │ Push Notification  │ 06/11/2025 05:09 PM │ Approved  │ ○ Edit 🗑  │
+└────────────────┴─────────────────────────┴────────────────────┴─────────────────────┴───────────┴────────────┘
+│  10 row(s) total                                    Rows per page: 10    Page 1 of 8  « ‹ › »   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+\`\`\`
+
+### 8.6 Templates List Columns
+
+| Column | Description |
+|---|---|
+| ID | Unique identifier for each template |
+| Template Name | The name you gave your template (e.g., happy_birthday_wishes) |
+| Template Type | The channel type: Push Notification, Whats App, SMS, or Email |
+| Creation Date | Date and time when the template was created |
+| Status | Current approval status (Pending or Approved) |
+| Actions | Toggle switch, Edit button (orange), Delete button (red) |
+
+### 8.7 Template Status Meanings
+
+| Status | Color | Meaning |
+|---|---|---|
+| Pending | Orange | Template submitted and awaiting Meta review |
+| Approved | Green | Template approved and ready for use in campaigns |
+
+### 8.8 Actions Available
+
+- **Toggle Switch** - Enable or disable the template
+- **Edit Button** (orange) - Modify the template (if allowed)
+- **Delete Button** (red) - Remove the template permanently
+
+### 8.9 After Approval
 
 Once approved:
-- Template appears in your approved templates list
+- Template status changes from "Pending" to "Approved" (green)
 - You can use the template in campaigns
 - Template can be selected when sending messages
 - Analytics tracking becomes available
