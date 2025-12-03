@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
 import { docsContent } from "@/lib/docsContent";
+import { messagingServiceDocs } from "@/lib/messagingServiceDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ interface MainMenuItem {
   expandable?: boolean;
   subItems?: NavItem[];
   disabled?: boolean;
+  moduleKey?: string;
 }
 
 const userManagementSubItems: NavItem[] = [
@@ -53,11 +55,24 @@ const userManagementSubItems: NavItem[] = [
   { title: "FAQ", id: "12-frequently-asked-questions" },
 ];
 
+const messagingServiceSubItems: NavItem[] = [
+  { title: "Introduction to Templates", id: "ms-1-introduction-to-templates" },
+  { title: "Accessing Templates", id: "ms-2-accessing-templates" },
+  { title: "Template Types Overview", id: "ms-3-template-types-overview" },
+  { title: "Creating WhatsApp Template", id: "ms-4-creating-a-whatsapp-template" },
+  { title: "Template Fields", id: "ms-5-template-fields-and-configuration" },
+  { title: "Using Variables", id: "ms-6-using-variables-in-templates" },
+  { title: "Adding Sample Data", id: "ms-7-adding-sample-data" },
+  { title: "Submitting for Approval", id: "ms-8-submitting-for-approval" },
+  { title: "Template Best Practices", id: "ms-9-template-best-practices" },
+  { title: "Troubleshooting", id: "ms-10-troubleshooting" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
   { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
-  { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems },
-  { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems, moduleKey: "user-management" },
+  { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, subItems: messagingServiceSubItems, moduleKey: "messaging-service" },
   { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, disabled: true },
   { title: "Data Source", icon: <Database className="h-5 w-5" />, disabled: true },
   { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
@@ -66,23 +81,33 @@ const mainMenuItems: MainMenuItem[] = [
   { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
 ];
 
+type ActiveModule = "user-management" | "messaging-service";
+
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
+  const [activeModule, setActiveModule] = useState<ActiveModule>("user-management");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({ "User Management": true });
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const toggleMenu = (title: string) => {
+  const toggleMenu = (title: string, moduleKey?: string) => {
     setExpandedMenus(prev => ({ ...prev, [title]: !prev[title] }));
+    if (moduleKey) {
+      setActiveModule(moduleKey as ActiveModule);
+    }
   };
 
   const handleDownloadPDF = () => {
     const element = contentRef.current;
     if (!element) return;
 
+    const filename = activeModule === "user-management" 
+      ? 'Worksii-User-Management-Manual.pdf'
+      : 'Worksii-Messaging-Service-Manual.pdf';
+
     const opt = {
       margin: [0.5, 0.5, 0.5, 0.5] as [number, number, number, number],
-      filename: 'Worksii-User-Management-Manual.pdf',
+      filename,
       image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -91,9 +116,16 @@ export default function Documentation() {
     html2pdf().set(opt).from(element).save();
   };
 
+  const currentSubItems = activeModule === "user-management" ? userManagementSubItems : messagingServiceSubItems;
+  const currentDocs = activeModule === "user-management" ? docsContent : messagingServiceDocs;
+  const currentTitle = activeModule === "user-management" ? "User Management Manual" : "Messaging Service - Templates";
+  const currentSubtitle = activeModule === "user-management" 
+    ? "Comprehensive guide for Worksii Platform administrators" 
+    : "Complete guide for creating and managing message templates";
+
   useEffect(() => {
     const handleScroll = () => {
-      const sections = userManagementSubItems.map((item) => document.getElementById(item.id));
+      const sections = currentSubItems.map((item) => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 150;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -107,7 +139,7 @@ export default function Documentation() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [currentSubItems]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -124,6 +156,17 @@ export default function Documentation() {
       });
       setActiveSection(id);
       setIsMobileMenuOpen(false);
+    }
+  };
+
+  const handleSubItemClick = (id: string, moduleKey?: string) => {
+    if (moduleKey && moduleKey !== activeModule) {
+      setActiveModule(moduleKey as ActiveModule);
+      setTimeout(() => {
+        scrollToSection(id);
+      }, 100);
+    } else {
+      scrollToSection(id);
     }
   };
 
@@ -147,19 +190,18 @@ export default function Documentation() {
         <div className="px-2 py-1">
           {mainMenuItems.map((item) => (
             <div key={item.title}>
-              {item.expandable && item.subItems ? (
+              {item.expandable && item.subItems && !item.disabled ? (
                 <Collapsible 
                   open={expandedMenus[item.title]} 
-                  onOpenChange={() => !item.disabled && toggleMenu(item.title)}
+                  onOpenChange={() => toggleMenu(item.title, item.moduleKey)}
                 >
                   <CollapsibleTrigger 
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors",
-                      item.disabled 
-                        ? "text-gray-400 cursor-not-allowed" 
+                      activeModule === item.moduleKey
+                        ? "text-orange-600 bg-orange-50"
                         : "text-gray-700 hover:bg-gray-100"
                     )}
-                    disabled={item.disabled}
                   >
                     {item.icon}
                     <span className="flex-1 text-left">{item.title}</span>
@@ -175,10 +217,10 @@ export default function Documentation() {
                     {item.subItems.map((subItem) => (
                       <button
                         key={subItem.id}
-                        onClick={() => scrollToSection(subItem.id)}
+                        onClick={() => handleSubItemClick(subItem.id, item.moduleKey)}
                         className={cn(
                           "w-full flex items-center px-3 py-2 text-sm rounded-md transition-colors text-left",
-                          activeSection === subItem.id
+                          activeSection === subItem.id && activeModule === item.moduleKey
                             ? "bg-orange-50 text-orange-600 font-medium"
                             : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                         )}
@@ -260,8 +302,8 @@ export default function Documentation() {
         <div className="max-w-4xl mx-auto px-6 py-20 md:py-12 md:px-12">
           <div ref={contentRef}>
             <div className="mb-12 text-center md:text-left">
-              <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 text-gray-900">User Management Manual</h1>
-              <p className="text-xl text-gray-500">Comprehensive guide for Worksii Platform administrators</p>
+              <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 text-gray-900">{currentTitle}</h1>
+              <p className="text-xl text-gray-500">{currentSubtitle}</p>
             </div>
             
             <article className="prose prose-slate max-w-none">
@@ -272,7 +314,9 @@ export default function Documentation() {
                     <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-8 text-gray-900 scroll-m-20" {...props} />
                   ),
                   h2: ({ node, ...props }) => {
-                    const id = props.id || props.children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    const textContent = props.children?.toString() || '';
+                    const baseId = textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    const id = activeModule === "messaging-service" ? `ms-${baseId}` : baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
                   },
                   h3: ({ node, ...props }) => (
@@ -347,13 +391,13 @@ export default function Documentation() {
                   }
                 }}
               >
-                {docsContent}
+                {currentDocs}
               </ReactMarkdown>
             </article>
             
             <div className="mt-24 pt-8 border-t border-gray-200 flex justify-between text-sm text-gray-500">
               <span>Last updated: December 2024</span>
-              <span>Worksii User Management</span>
+              <span>Worksii {activeModule === "user-management" ? "User Management" : "Messaging Service"}</span>
             </div>
           </div>
         </div>
