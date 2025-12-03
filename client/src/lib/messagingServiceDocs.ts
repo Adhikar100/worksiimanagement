@@ -374,38 +374,81 @@ The Worksii Team
 
 Sample data shows Meta what your template will look like with real content. This helps in the approval process by demonstrating the intended use of your template.
 
-### 7.2 Adding Sample Data
+### 7.2 Template Preview
 
-**Step 1:** After entering your template body with variables, click the **"Add Sample Data"** button.
+After entering your body text (e.g., "This is for the {{1}} testing"), you will see:
 
-**Step 2:** A dialog will appear titled:
+1. **WhatsApp Preview** - A phone preview showing how your message will appear
+2. **Three buttons at the bottom:**
+   - **Cancel** (red) - Discard and go back
+   - **Add Sample Data** (orange outline) - Map variables with sample content
+   - **Submit for Approval** (orange filled) - Submit to Meta for review
+
 \`\`\`plaintext
-"Map the placeholders with sample data"
+┌─────────────────────────────────┐
+│        WhatsApp Preview         │
+│  ┌───────────────────────────┐  │
+│  │ This is for the {{1}}    │  │
+│  │ testing                   │  │
+│  │                    13:36  │  │
+│  └───────────────────────────┘  │
+│                                 │
+│ [Cancel] [Add Sample Data] [Submit for Approval] │
+└─────────────────────────────────┘
 \`\`\`
 
-**Step 3:** For each variable, you will see:
+### 7.3 Adding Sample Data Dialog
 
-| Field | Options | Description |
-|---|---|---|
-| Variable Number | 1, 2, 3... | The placeholder number |
-| Type | Static | Fixed sample value |
-| Content Input | Text field | Enter sample content |
+**Step 1:** Click the **"Add Sample Data"** button.
+
+**Step 2:** A dialog will appear with:
+
+\`\`\`plaintext
+┌──────────────────────────────────────────────────────────┐
+│  Add Sample Data                                    [X]  │
+│                                                          │
+│  Map the placeholders with sample data                   │
+│                                                          │
+│  You can add sample data for the placeholders in the     │
+│  template.                                               │
+│                                                          │
+│  Message Body                                            │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │  1                                    Static  ○    │  │
+│  │  ┌──────────────────────────────────────────────┐  │  │
+│  │  │ Enter content for 1                          │  │  │
+│  │  └──────────────────────────────────────────────┘  │  │
+│  └────────────────────────────────────────────────────┘  │
+│                                                          │
+│           [Cancel]        [✓ Add Sample Data]            │
+└──────────────────────────────────────────────────────────┘
+\`\`\`
+
+**Step 3:** For each variable in your template, you will see:
+
+| Element | Description |
+|---|---|
+| Variable Number | The placeholder number (1, 2, 3...) |
+| Static Toggle | Toggle switch (usually set to Static) |
+| Input Field | Text field labeled "Enter content for 1" |
 
 **Step 4:** Enter appropriate sample content for each variable.
 
-**Example:**
+**Example:** If your body is "This is for the {{1}} testing":
 
-| Variable | Type | Sample Content |
+| Variable | Input Label | Sample Content |
 |---|---|---|
-| 1 | Static | John Smith |
-| 2 | Static | ORD-12345 |
-| 3 | Static | December 15, 2024 |
+| 1 | Enter content for 1 | John Smith |
 
-**Step 5:** Click **"Save"** or **"Confirm"** to save the sample data.
+**Step 5:** Click the green **"Add Sample Data"** button to save.
 
 **Step 6:** Click **"Cancel"** to discard and return to the form.
 
-### 7.3 Sample Data Best Practices
+### 7.4 WhatsApp Preview Panel
+
+The right side of the dialog shows a live **WhatsApp Preview** that updates as you enter sample data. This helps you visualize how the final message will look to recipients.
+
+### 7.5 Sample Data Best Practices
 
 - Use realistic data that represents actual use cases
 - Avoid placeholder text like "test" or "sample"
