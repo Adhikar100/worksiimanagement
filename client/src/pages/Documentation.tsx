@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import html2pdf from "html2pdf.js";
 import { docsContent } from "@/lib/docsContent";
 import { messagingServiceDocs } from "@/lib/messagingServiceDocs";
+import { campaignDocs } from "@/lib/campaignDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -68,12 +69,25 @@ const messagingServiceSubItems: NavItem[] = [
   { title: "Troubleshooting", id: "ms-10-troubleshooting" },
 ];
 
+const campaignSubItems: NavItem[] = [
+  { title: "Introduction to Campaigns", id: "cp-1-introduction-to-campaigns" },
+  { title: "Accessing Static Campaigns", id: "cp-2-accessing-static-campaigns" },
+  { title: "Creating New Campaign", id: "cp-3-creating-a-new-static-campaign" },
+  { title: "Step 1: Campaign Details", id: "cp-4-step-1-campaign-details" },
+  { title: "Step 2: Data Source", id: "cp-5-step-2-data-source-configuration" },
+  { title: "Step 3: Template Selection", id: "cp-6-step-3-template-selection" },
+  { title: "Step 4: Scheduling", id: "cp-7-step-4-scheduling-options" },
+  { title: "Saving & Launching", id: "cp-8-saving-and-launching-campaign" },
+  { title: "Campaign Management", id: "cp-9-campaign-management" },
+  { title: "Troubleshooting", id: "cp-10-troubleshooting" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
   { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
   { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems, moduleKey: "user-management" },
   { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, subItems: messagingServiceSubItems, moduleKey: "messaging-service" },
-  { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, subItems: campaignSubItems, moduleKey: "campaign" },
   { title: "Data Source", icon: <Database className="h-5 w-5" />, disabled: true },
   { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
   { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
@@ -81,7 +95,7 @@ const mainMenuItems: MainMenuItem[] = [
   { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
 ];
 
-type ActiveModule = "user-management" | "messaging-service";
+type ActiveModule = "user-management" | "messaging-service" | "campaign";
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -101,13 +115,15 @@ export default function Documentation() {
     const element = contentRef.current;
     if (!element) return;
 
-    const filename = activeModule === "user-management" 
-      ? 'Worksii-User-Management-Manual.pdf'
-      : 'Worksii-Messaging-Service-Manual.pdf';
+    const filenames: Record<ActiveModule, string> = {
+      "user-management": 'Worksii-User-Management-Manual.pdf',
+      "messaging-service": 'Worksii-Messaging-Service-Manual.pdf',
+      "campaign": 'Worksii-Campaign-Manual.pdf'
+    };
 
     const opt = {
       margin: [0.5, 0.5, 0.5, 0.5] as [number, number, number, number],
-      filename,
+      filename: filenames[activeModule],
       image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -116,12 +132,31 @@ export default function Documentation() {
     html2pdf().set(opt).from(element).save();
   };
 
-  const currentSubItems = activeModule === "user-management" ? userManagementSubItems : messagingServiceSubItems;
-  const currentDocs = activeModule === "user-management" ? docsContent : messagingServiceDocs;
-  const currentTitle = activeModule === "user-management" ? "User Management Manual" : "Messaging Service - Templates";
-  const currentSubtitle = activeModule === "user-management" 
-    ? "Comprehensive guide for Worksii Platform administrators" 
-    : "Complete guide for creating and managing message templates";
+  const moduleConfig: Record<ActiveModule, { subItems: NavItem[], docs: string, title: string, subtitle: string }> = {
+    "user-management": {
+      subItems: userManagementSubItems,
+      docs: docsContent,
+      title: "User Management Manual",
+      subtitle: "Comprehensive guide for Worksii Platform administrators"
+    },
+    "messaging-service": {
+      subItems: messagingServiceSubItems,
+      docs: messagingServiceDocs,
+      title: "Messaging Service - Templates",
+      subtitle: "Complete guide for creating and managing message templates"
+    },
+    "campaign": {
+      subItems: campaignSubItems,
+      docs: campaignDocs,
+      title: "Campaign - Static Campaigns",
+      subtitle: "Complete guide for creating and managing bulk messaging campaigns"
+    }
+  };
+
+  const currentSubItems = moduleConfig[activeModule].subItems;
+  const currentDocs = moduleConfig[activeModule].docs;
+  const currentTitle = moduleConfig[activeModule].title;
+  const currentSubtitle = moduleConfig[activeModule].subtitle;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -316,7 +351,12 @@ export default function Documentation() {
                   h2: ({ node, ...props }) => {
                     const textContent = props.children?.toString() || '';
                     const baseId = textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                    const id = activeModule === "messaging-service" ? `ms-${baseId}` : baseId;
+                    const prefixes: Record<ActiveModule, string> = {
+                      "user-management": "",
+                      "messaging-service": "ms-",
+                      "campaign": "cp-"
+                    };
+                    const id = prefixes[activeModule] + baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
                   },
                   h3: ({ node, ...props }) => (
@@ -397,7 +437,7 @@ export default function Documentation() {
             
             <div className="mt-24 pt-8 border-t border-gray-200 flex justify-between text-sm text-gray-500">
               <span>Last updated: December 2024</span>
-              <span>Worksii {activeModule === "user-management" ? "User Management" : "Messaging Service"}</span>
+              <span>Worksii {activeModule === "user-management" ? "User Management" : activeModule === "messaging-service" ? "Messaging Service" : "Campaign"}</span>
             </div>
           </div>
         </div>
