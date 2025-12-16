@@ -6,6 +6,7 @@ import html2pdf from "html2pdf.js";
 import { docsContent } from "@/lib/docsContent";
 import { messagingServiceDocs } from "@/lib/messagingServiceDocs";
 import { campaignDocs } from "@/lib/campaignDocs";
+import { dataSourceDocs } from "@/lib/dataSourceDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -82,20 +83,32 @@ const campaignSubItems: NavItem[] = [
   { title: "Troubleshooting", id: "cp-10-troubleshooting" },
 ];
 
+const dataSourceSubItems: NavItem[] = [
+  { title: "Overview", id: "ds-1-overview" },
+  { title: "Purpose of Data Sources", id: "ds-2-purpose-of-data-sources" },
+  { title: "Google Sheets Data Source", id: "ds-3-creating-a-google-sheets-data-source" },
+  { title: "Data Mapping & Validation", id: "ds-4-data-mapping--validation" },
+  { title: "Action Buttons", id: "ds-5-action-buttons" },
+  { title: "Campaign Availability", id: "ds-6-campaign-availability-rule" },
+  { title: "CSV Data Source", id: "ds-7-csv-data-source" },
+  { title: "Common Issues & Best Practices", id: "ds-8-common-issues--best-practices" },
+  { title: "Troubleshooting", id: "ds-9-troubleshooting" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
   { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
   { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems, moduleKey: "user-management" },
   { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, subItems: messagingServiceSubItems, moduleKey: "messaging-service" },
   { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, subItems: campaignSubItems, moduleKey: "campaign" },
-  { title: "Data Source", icon: <Database className="h-5 w-5" />, disabled: true },
+  { title: "Data Source", icon: <Database className="h-5 w-5" />, expandable: true, subItems: dataSourceSubItems, moduleKey: "data-source" },
   { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
   { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
   { title: "Unified Inbox", icon: <Inbox className="h-5 w-5" />, disabled: true },
   { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
 ];
 
-type ActiveModule = "user-management" | "messaging-service" | "campaign";
+type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source";
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -118,7 +131,8 @@ export default function Documentation() {
     const filenames: Record<ActiveModule, string> = {
       "user-management": 'Worksii-User-Management-Manual.pdf',
       "messaging-service": 'Worksii-Messaging-Service-Manual.pdf',
-      "campaign": 'Worksii-Campaign-Manual.pdf'
+      "campaign": 'Worksii-Campaign-Manual.pdf',
+      "data-source": 'Worksii-Data-Source-Manual.pdf'
     };
 
     const opt = {
@@ -150,6 +164,12 @@ export default function Documentation() {
       docs: campaignDocs,
       title: "Campaign - Static Campaigns",
       subtitle: "Complete guide for creating and managing bulk messaging campaigns"
+    },
+    "data-source": {
+      subItems: dataSourceSubItems,
+      docs: dataSourceDocs,
+      title: "Data Source Module",
+      subtitle: "Complete guide for creating and managing data sources for campaigns"
     }
   };
 
@@ -354,7 +374,8 @@ export default function Documentation() {
                     const prefixes: Record<ActiveModule, string> = {
                       "user-management": "",
                       "messaging-service": "ms-",
-                      "campaign": "cp-"
+                      "campaign": "cp-",
+                      "data-source": "ds-"
                     };
                     const id = prefixes[activeModule] + baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
