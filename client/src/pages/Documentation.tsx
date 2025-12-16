@@ -7,6 +7,7 @@ import { docsContent } from "@/lib/docsContent";
 import { messagingServiceDocs } from "@/lib/messagingServiceDocs";
 import { campaignDocs } from "@/lib/campaignDocs";
 import { dataSourceDocs } from "@/lib/dataSourceDocs";
+import { generalConfigDocs } from "@/lib/generalConfigDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -95,6 +96,17 @@ const dataSourceSubItems: NavItem[] = [
   { title: "Troubleshooting", id: "ds-9-troubleshooting" },
 ];
 
+const generalConfigSubItems: NavItem[] = [
+  { title: "Introduction", id: "gc-1-introduction" },
+  { title: "Navigation & Access", id: "gc-2-navigation--access" },
+  { title: "Auto Top-Up Settings", id: "gc-3-auto-top-up-settings" },
+  { title: "Email Signatures", id: "gc-4-email-signatures" },
+  { title: "Firebase Project", id: "gc-5-firebase-project" },
+  { title: "API Client", id: "gc-6-api-client" },
+  { title: "Role & Access", id: "gc-7-role--access-considerations" },
+  { title: "Handover Checklist", id: "gc-8-handover-checklist" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
   { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
@@ -103,12 +115,12 @@ const mainMenuItems: MainMenuItem[] = [
   { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, subItems: campaignSubItems, moduleKey: "campaign" },
   { title: "Data Source", icon: <Database className="h-5 w-5" />, expandable: true, subItems: dataSourceSubItems, moduleKey: "data-source" },
   { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
-  { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
+  { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, subItems: generalConfigSubItems, moduleKey: "general-config" },
   { title: "Unified Inbox", icon: <Inbox className="h-5 w-5" />, disabled: true },
   { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
 ];
 
-type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source";
+type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source" | "general-config";
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -132,7 +144,8 @@ export default function Documentation() {
       "user-management": 'Worksii-User-Management-Manual.pdf',
       "messaging-service": 'Worksii-Messaging-Service-Manual.pdf',
       "campaign": 'Worksii-Campaign-Manual.pdf',
-      "data-source": 'Worksii-Data-Source-Manual.pdf'
+      "data-source": 'Worksii-Data-Source-Manual.pdf',
+      "general-config": 'Worksii-General-Configuration-Manual.pdf'
     };
 
     const opt = {
@@ -140,7 +153,7 @@ export default function Documentation() {
       filename: filenames[activeModule],
       image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' as const }
     };
 
     html2pdf().set(opt).from(element).save();
@@ -170,6 +183,12 @@ export default function Documentation() {
       docs: dataSourceDocs,
       title: "Data Source Module",
       subtitle: "Complete guide for creating and managing data sources for campaigns"
+    },
+    "general-config": {
+      subItems: generalConfigSubItems,
+      docs: generalConfigDocs,
+      title: "General Configuration",
+      subtitle: "System-wide settings for wallet, email signatures, Firebase, and API access"
     }
   };
 
@@ -375,7 +394,8 @@ export default function Documentation() {
                       "user-management": "",
                       "messaging-service": "ms-",
                       "campaign": "cp-",
-                      "data-source": "ds-"
+                      "data-source": "ds-",
+                      "general-config": "gc-"
                     };
                     const id = prefixes[activeModule] + baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
