@@ -28,7 +28,6 @@ import {
   MessageCircle 
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import logoImage from "@assets/generated_images/worksii_logo_abstract.png";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface NavItem {
@@ -289,30 +288,27 @@ export default function Documentation() {
 
   const Sidebar = () => (
     <div className="h-full flex flex-col bg-white border-r border-gray-200">
-      {/* Logo */}
       <div className="p-4 flex items-center gap-2">
-        <div className="h-8 w-8 rounded overflow-hidden flex items-center justify-center">
-          <img src={logoImage} alt="Worksii Logo" className="h-full w-full object-cover" />
+        <div className="h-8 w-8 rounded bg-orange-500 flex items-center justify-center">
+          <span className="text-white font-bold text-sm">W</span>
         </div>
         <span className="font-semibold text-lg text-gray-900">Work<span className="text-orange-500">sii</span></span>
       </div>
 
-      {/* Navigations Label */}
       <div className="px-4 py-2">
         <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">Navigations</span>
       </div>
 
-      {/* Menu Items */}
       <ScrollArea className="flex-1">
         <div className="px-2 py-1">
           {mainMenuItems.map((item) => (
             <div key={item.title}>
               {item.expandable && item.subItems && !item.disabled ? (
-                <Collapsible 
-                  open={expandedMenus[item.title]} 
+                <Collapsible
+                  open={expandedMenus[item.title]}
                   onOpenChange={() => toggleMenu(item.title, item.moduleKey)}
                 >
-                  <CollapsibleTrigger 
+                  <CollapsibleTrigger
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors",
                       activeModule === item.moduleKey
@@ -322,14 +318,14 @@ export default function Documentation() {
                   >
                     {item.icon}
                     <span className="flex-1 text-left">{item.title}</span>
-                    <ChevronRight 
+                    <ChevronRight
                       className={cn(
                         "h-4 w-4 text-gray-400 transition-transform duration-200",
                         expandedMenus[item.title] && "transform rotate-90"
-                      )} 
+                      )}
                     />
                   </CollapsibleTrigger>
-                  
+
                   <CollapsibleContent className="ml-8 mt-1 space-y-0.5 border-l border-gray-200 pl-3">
                     {item.subItems.map((subItem) => (
                       <button
@@ -351,8 +347,8 @@ export default function Documentation() {
                 <button
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-md transition-colors",
-                    item.disabled 
-                      ? "text-gray-400 cursor-not-allowed" 
+                    item.disabled
+                      ? "text-gray-400 cursor-not-allowed"
                       : "text-gray-700 hover:bg-gray-100"
                   )}
                   disabled={item.disabled}
@@ -369,10 +365,9 @@ export default function Documentation() {
         </div>
       </ScrollArea>
 
-      {/* Download Button at Bottom */}
       <div className="p-4 border-t border-gray-200">
-        <Button 
-          className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white" 
+        <Button
+          className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
           onClick={handleDownloadPDF}
         >
           <Download className="h-4 w-4" />
@@ -384,16 +379,14 @@ export default function Documentation() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex">
-      {/* Desktop Sidebar */}
       <aside className="hidden md:block w-64 fixed inset-y-0 z-30">
         <Sidebar />
       </aside>
 
-      {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 border-b bg-white z-40 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded overflow-hidden">
-            <img src={logoImage} alt="Worksii Logo" className="h-full w-full object-cover" />
+          <div className="h-8 w-8 rounded bg-orange-500 flex items-center justify-center">
+            <span className="text-white font-bold text-sm">W</span>
           </div>
           <span className="font-semibold text-lg">Work<span className="text-orange-500">sii</span></span>
         </div>
@@ -414,7 +407,6 @@ export default function Documentation() {
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="flex-1 md:ml-64 w-full">
         <div className="max-w-4xl mx-auto px-6 py-20 md:py-12 md:px-12">
           <div ref={contentRef}>
@@ -422,7 +414,7 @@ export default function Documentation() {
               <h1 className="text-4xl font-bold tracking-tight lg:text-5xl mb-4 text-gray-900">{currentTitle}</h1>
               <p className="text-xl text-gray-500">{currentSubtitle}</p>
             </div>
-            
+
             <article className="prose prose-slate max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -507,11 +499,11 @@ export default function Documentation() {
                       }
                     };
                     return (
-                      <a 
-                        href={href} 
+                      <a
+                        href={href}
                         onClick={handleClick}
-                        className="font-medium text-orange-600 underline underline-offset-4 hover:text-orange-500 transition-colors" 
-                        {...props} 
+                        className="font-medium text-orange-600 underline underline-offset-4 hover:text-orange-500 transition-colors"
+                        {...props}
                       />
                     );
                   }
@@ -520,7 +512,7 @@ export default function Documentation() {
                 {currentDocs}
               </ReactMarkdown>
             </article>
-            
+
             <div className="mt-24 pt-8 border-t border-gray-200 flex justify-between text-sm text-gray-500">
               <span>Last updated: December 2024</span>
               <span>Worksii {activeModule === "user-management" ? "User Management" : activeModule === "messaging-service" ? "Messaging Service" : "Campaign"}</span>
