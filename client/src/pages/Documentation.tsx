@@ -9,6 +9,7 @@ import { campaignDocs } from "@/lib/campaignDocs";
 import { dataSourceDocs } from "@/lib/dataSourceDocs";
 import { generalConfigDocs } from "@/lib/generalConfigDocs";
 import { chatiiDocs } from "@/lib/chatiiDocs";
+import { walletDocs } from "@/lib/walletDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -121,9 +122,23 @@ const chatiiSubItems: NavItem[] = [
   { title: "Handover Checklist", id: "ch-10-handover-checklist" },
 ];
 
+const walletSubItems: NavItem[] = [
+  { title: "What is the Wallet?", id: "wt-1-what-is-the-wallet-in-worksii" },
+  { title: "Why Wallet is Critical", id: "wt-2-why-wallet-transactions-are-critical" },
+  { title: "Navigation & Layout", id: "wt-3-navigation--page-layout" },
+  { title: "Summary Cards", id: "wt-4-wallet-summary-cards" },
+  { title: "Add Funds", id: "wt-5-add-funds" },
+  { title: "Filter Transactions", id: "wt-6-filter-transactions" },
+  { title: "Transactions Table", id: "wt-7-wallet-transactions-table" },
+  { title: "How Withdrawals Work", id: "wt-8-how-withdrawals-actually-happen" },
+  { title: "Auto Top-Up Relationship", id: "wt-9-relationship-with-auto-top-up" },
+  { title: "User Stories", id: "wt-10-real-user-stories" },
+  { title: "Best Practices", id: "wt-11-best-practices" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
-  { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
+  { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, expandable: true, subItems: walletSubItems, moduleKey: "wallet" },
   { title: "User Management", icon: <Users className="h-5 w-5" />, expandable: true, subItems: userManagementSubItems, moduleKey: "user-management" },
   { title: "Messaging Service", icon: <Mail className="h-5 w-5" />, expandable: true, subItems: messagingServiceSubItems, moduleKey: "messaging-service" },
   { title: "Campaign", icon: <Megaphone className="h-5 w-5" />, expandable: true, subItems: campaignSubItems, moduleKey: "campaign" },
@@ -134,7 +149,7 @@ const mainMenuItems: MainMenuItem[] = [
   { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, expandable: true, subItems: chatiiSubItems, moduleKey: "chatii" },
 ];
 
-type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source" | "general-config" | "chatii";
+type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source" | "general-config" | "chatii" | "wallet";
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -160,7 +175,8 @@ export default function Documentation() {
       "campaign": 'Worksii-Campaign-Manual.pdf',
       "data-source": 'Worksii-Data-Source-Manual.pdf',
       "general-config": 'Worksii-General-Configuration-Manual.pdf',
-      "chatii": 'Worksii-Chatii-Manual.pdf'
+      "chatii": 'Worksii-Chatii-Manual.pdf',
+      "wallet": 'Worksii-Wallet-Transactions-Manual.pdf'
     };
 
     const opt = {
@@ -210,6 +226,12 @@ export default function Documentation() {
       docs: chatiiDocs,
       title: "Chatii Module",
       subtitle: "Managing WhatsApp and SMS conversations in the unified inbox"
+    },
+    "wallet": {
+      subItems: walletSubItems,
+      docs: walletDocs,
+      title: "Wallet Transactions",
+      subtitle: "Managing prepaid balance, deposits, withdrawals, and financial tracking"
     }
   };
 
@@ -417,7 +439,8 @@ export default function Documentation() {
                       "campaign": "cp-",
                       "data-source": "ds-",
                       "general-config": "gc-",
-                      "chatii": "ch-"
+                      "chatii": "ch-",
+                      "wallet": "wt-"
                     };
                     const id = prefixes[activeModule] + baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
