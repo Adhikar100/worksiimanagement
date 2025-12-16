@@ -1,0 +1,454 @@
+# Worksii – Chatii Module
+
+## Detailed User Manual & Handover Document (WhatsApp / SMS Inbox)
+
+---
+
+## 1. Overview
+
+**Chatii** is Worksii’s built-in inbox for managing two-way conversations with end users across supported channels. Based on the current UI, Chatii supports at least:
+
+* **WhatsApp** conversations
+* **SMS** conversations
+
+Chatii is typically used by admins, support agents, or campaign operators to:
+
+* View and respond to inbound messages
+* Organize conversations into folders (e.g., Important, General)
+* Monitor unread conversations and active queue size
+* Maintain consistent customer communication during campaigns
+
+> **Note (Transparency):** The exact backend rules (assignment, SLA, auto-routing, message templates, retention) depend on your Worksii environment and configuration. This document explains the visible UI and the standard operational behavior expected for an inbox module, and includes handover notes + QA checklists to validate specifics in your system.
+
+---
+
+## 2. Navigation & Access
+
+### 2.1 Menu Path
+
+**Dashboard → Chatii**
+
+### 2.2 Who Should Use Chatii
+
+* Support / Operations users handling inbound customer communication
+* Admin users supervising channels and configuration
+* QA users validating conversation workflow and reliability
+
+### 2.3 Access Model (Current State)
+
+There is **no role-based permission or RBAC** implemented in Chatii at present.
+
+* Any user who can access the Worksii dashboard can access Chatii
+* All users can view conversations, reply, create folders, and move conversations
+
+> This document reflects the **current system behavior only**. Permission models are not applicable right now.
+
+---
+
+## 3. Chatii Screen Layout (What You See)
+
+From the UI screenshot, Chatii contains the following elements:
+
+### 3.1 Header Area
+
+* **Module title:** “Chatii”
+* **Connectivity status:** “Online” indicator
+
+**What “Online” typically means:**
+
+* Worksii can currently communicate with the configured messaging channel provider(s)
+* The client session/token is active (especially for WhatsApp)
+
+**Operational note:** “Online” does not always guarantee message delivery—delivery can still fail due to provider-side issues, account limits, or template restrictions.
+
+---
+
+### 3.2 Search Bar
+
+* **Search chats** input
+
+Typical usage:
+
+* Find a conversation by contact name/number
+* Search by last message keyword (if enabled)
+
+QA/Validation:
+
+* Confirm whether the search covers:
+
+  * Contact name
+  * Phone number
+  * Message content
+  * Conversation ID
+
+---
+
+### 3.3 Channel Tabs
+
+* **WhatsApp** tab
+* **SMS** tab
+
+Behavior:
+
+* Selecting a tab filters the inbox to that channel only
+* Unread counts and folder counts usually apply to the selected channel (verify)
+
+Handover note:
+
+* If WhatsApp uses a sender configuration, confirm the sender ID/account connected.
+* If SMS uses a gateway, confirm the SMS provider configuration.
+
+---
+
+### 3.4 Folder Panel
+
+The UI shows:
+
+* **Folders** section with a count badge
+* Folder list items (examples shown):
+
+  * **Important**
+  * **General**
+* Unread/queued counts shown at the right of folders
+* A **“+” (plus)** icon next to Folders (for adding a new folder)
+
+Interpretation of badges (typical):
+
+* Folder badge count indicates number of conversations in that folder OR number of folders with unread items (verify)
+* Per-folder badge indicates unread conversations/messages or total conversations in that folder
+
+> Example shown: “General” has a large count (1934) which likely represents total conversations or unread conversations in the General folder.
+
+---
+
+## 4. Core Concepts (New Admin Friendly)
+
+### 4.1 Conversation
+
+A conversation is a thread of messages between:
+
+* A customer (or recipient) and
+* Your Worksii messaging channel (WhatsApp/SMS sender)
+
+A conversation typically has:
+
+* Contact identifier (phone number)
+* Channel type (WhatsApp/SMS)
+* Message timeline (inbound/outbound)
+* Reply status (replied / not replied)
+
+---
+
+### 4.2 Default Folders: Important & General
+
+Chatii has **two system default folders** that are always available:
+
+#### Important (Default System Folder)
+
+* This folder automatically lists **unreplied inbound messages**
+* Any new inbound message that has **not yet received a reply** appears in **Important**
+* This folder is designed for **priority handling and agent attention**
+
+**Key behavior:**
+
+* If a message is **not replied**, it stays in **Important**
+* Once an agent **replies to the message**, it is automatically removed from Important
+
+#### General (Default System Folder)
+
+* This folder contains **all replied or normal conversations**
+* Once a conversation is replied to, it is moved automatically from **Important → General**
+* General acts as the main archive / working folder for conversations
+
+**Important Note:**
+
+* Agents do not manually move messages out of Important after replying
+* The system handles this transition automatically
+
+---
+
+## 5. User Stories & Real-World Scenarios (In-Depth)
+
+### User Story 1: Handling a New Inbound Message (Core Flow)
+
+**As a support agent**, I want to immediately see all unreplied inbound messages, **so that no customer message is missed**.
+
+**System behavior:**
+
+1. A customer sends a message via WhatsApp or SMS
+2. The conversation is automatically created
+3. The message appears in the **Important** folder
+4. The Important folder count increases
+
+**Outcome:**
+
+* Agent knows exactly which messages need attention
+
+---
+
+### User Story 2: Replying to a Message and Automatic Folder Movement
+
+**As a support agent**, when I reply to a customer message, I want the conversation to be removed from the priority queue automatically.
+
+**System behavior:**
+
+1. Agent opens a conversation from **Important**
+2. Agent sends a reply
+3. The system automatically moves the conversation to **General**
+4. Important count decreases; General count increases
+
+**Outcome:**
+
+* Important always shows only pending/unanswered messages
+* No manual folder management required
+
+---
+
+### User Story 3: Organizing Conversations Using Custom Folders
+
+**As an operator**, I want to group conversations by context (e.g., Billing, Escalation), **so that follow-ups are easier**.
+
+**System behavior:**
+
+1. User clicks the **+** button in Folders
+2. Creates a custom folder
+3. Scrolls down to see all folders
+4. Moves selected conversations into the custom folder
+
+**Outcome:**
+
+* Conversations are logically organized
+* Faster handling for recurring issues
+
+---
+
+### User Story 4: Daily Inbox Triage (Agent SOP)
+
+**As a support agent**, I want a simple daily workflow to manage large volumes of messages.
+
+**Recommended flow:**
+
+1. Open Chatii
+2. Select channel (WhatsApp/SMS)
+3. Start with **Important** folder
+4. Reply to all pending messages
+5. Review **General** for follow-ups
+6. Move special cases to custom folders
+
+**Outcome:**
+
+* Zero pending messages
+* Clean and predictable inbox
+
+---
+
+## 6. Typical Workflows (Step-by-Step)
+
+### 5.2 Search for a Chat
+
+1. Click the **Search chats** input
+2. Type a phone number, name, or keyword
+3. Press Enter / wait for results
+
+Expected result:
+
+* Matching conversations are displayed
+
+If no results:
+
+* Check if search is limited to the selected channel
+* Check if the conversation exists in a different folder
+
+---
+
+### 5.3 Use Folders for Triage
+
+1. Click **General** to view the default queue
+2. Click **Important** to view prioritized conversations
+
+Expected result:
+
+* Conversation list updates based on folder selection
+
+Operational best practice:
+
+* Start from **Important** first, then process **General**
+
+---
+
+### 5.4 Create a New Folder
+
+1. Click the **+ (Plus)** icon beside the **Folders** section
+2. Scroll down if required to view the folder creation option
+3. Enter a **Folder Name** (e.g., Escalations, Follow-Up, Billing)
+4. Save/Create the folder
+
+Expected result:
+
+* The new folder appears in the folder list
+* Folder is available for manual conversation organization
+
+---
+
+## 6. Inbox Rules & Behavior (Actual System Behavior)
+
+### 6.1 Automatic Folder Logic (Critical for New Admins)
+
+* **Important & General** are system-defined default folders
+* Folder behavior is driven by **reply status**, not manual action
+
+**Automatic Rules:**
+
+1. New inbound message → appears in **Important**
+2. Message is replied to → automatically moves to **General**
+3. No reply → remains in **Important**
+
+This ensures:
+
+* Unanswered messages are never missed
+* Agents can prioritize replies easily
+
+---
+
+### 6.2 Manual Folder Management
+
+In addition to system folders, agents can create **custom folders** and manually organize conversations.
+
+**Manual Actions Supported:**
+
+* Create new folders using the **+** button
+* Scroll down to view all available folders
+* Move conversations into any custom folder as needed
+
+**Common use cases:**
+
+* Escalations
+* Payment Issues
+* Campaign-Specific Conversations
+* Follow-Ups
+
+---
+
+### 6.3 Unread & Count Behavior
+
+* Folder counts reflect the number of conversations currently inside that folder
+* Important folder count decreases automatically after replies
+* General folder count increases as conversations are replied
+
+---
+
+## 7. Best Practices (Ops + QA)
+
+### 7.1 Operational Best Practices
+
+* Keep **Important** for real escalations only
+* Create a folder taxonomy aligned to business needs
+* Clear high-volume “General” backlog regularly
+* Monitor connectivity/online status during campaigns
+
+### 7.2 QA Best Practices
+
+* Validate message ordering and duplication handling
+* Validate unread count accuracy
+* Validate folder updates are reflected in real time
+* Validate search results match expected scope
+
+---
+
+## 8. Common Issues & Troubleshooting
+
+### Issue A: Status shows Offline / Not Online
+
+Possible causes:
+
+* WhatsApp sender disconnected
+* SMS gateway down
+* Token/session expired
+
+What to do:
+
+* Check Sender Configuration (WhatsApp/SMS)
+* Reconnect/re-authenticate channel (admin action)
+* Check network and provider status
+
+---
+
+### Issue B: Messages are not appearing
+
+Possible causes:
+
+* Channel webhook not receiving events
+* Filter applied (wrong channel tab or folder)
+
+What to do:
+
+* Switch tabs (WhatsApp ↔ SMS)
+* Check General folder
+* Validate provider logs / webhook status
+
+---
+
+### Issue C: Counts are incorrect
+
+Possible causes:
+
+* Cache not refreshed
+* Pagination not updating
+* Backend count job delayed
+
+What to do:
+
+* Refresh page
+* Validate counts by manual sampling
+* Report bug with steps + expected vs actual
+
+---
+
+## 9. Handover Checklist (For New Admin)
+
+✔ Confirm you can access Chatii
+✔ Verify channel tabs load (WhatsApp/SMS)
+✔ Check Online status behavior
+✔ Understand folder meaning (General vs Important)
+✔ Confirm ability to create folders
+✔ Validate search scope
+✔ Review how unread counts are calculated
+✔ Confirm where channel configuration is managed (Sender Configuration)
+
+---
+
+## 10. QA Test Coverage (Recommended High-Value Tests)
+
+### Smoke Tests
+
+* Open Chatii page → loads without errors
+* Switch WhatsApp/SMS tabs → list updates
+* Search chats → returns results
+
+### Functional Tests
+
+* Folder selection changes conversation list
+* Create folder and verify it persists after refresh
+* Verify unread count increases on new inbound message
+
+### Negative / Edge Tests
+
+* Offline scenario handling
+* Large volume folder performance (e.g., 1,000+ conversations)
+* Search special characters / partial numbers
+
+---
+
+## 11. Notes for Future Improvements (Optional Section)
+
+Common enhancements for inbox modules:
+
+* Assignment and ownership (Agent A, Agent B)
+* SLA timers and escalation rules
+* Tagging + labels in addition to folders
+* Bulk actions
+* Audit logs for edits and deletes
+
+---
+
+**End of Document**

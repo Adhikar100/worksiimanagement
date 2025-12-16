@@ -8,6 +8,7 @@ import { messagingServiceDocs } from "@/lib/messagingServiceDocs";
 import { campaignDocs } from "@/lib/campaignDocs";
 import { dataSourceDocs } from "@/lib/dataSourceDocs";
 import { generalConfigDocs } from "@/lib/generalConfigDocs";
+import { chatiiDocs } from "@/lib/chatiiDocs";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -107,6 +108,19 @@ const generalConfigSubItems: NavItem[] = [
   { title: "Handover Checklist", id: "gc-8-handover-checklist" },
 ];
 
+const chatiiSubItems: NavItem[] = [
+  { title: "Overview", id: "ch-1-overview" },
+  { title: "Navigation & Access", id: "ch-2-navigation--access" },
+  { title: "Screen Layout", id: "ch-3-chatii-screen-layout" },
+  { title: "Core Concepts", id: "ch-4-core-concepts" },
+  { title: "User Stories", id: "ch-5-user-stories--real-world-scenarios" },
+  { title: "Typical Workflows", id: "ch-6-typical-workflows" },
+  { title: "Inbox Rules & Behavior", id: "ch-7-inbox-rules--behavior" },
+  { title: "Best Practices", id: "ch-8-best-practices" },
+  { title: "Troubleshooting", id: "ch-9-common-issues--troubleshooting" },
+  { title: "Handover Checklist", id: "ch-10-handover-checklist" },
+];
+
 const mainMenuItems: MainMenuItem[] = [
   { title: "Dashboard", icon: <LayoutGrid className="h-5 w-5" />, disabled: true },
   { title: "Wallet Transactions", icon: <FileText className="h-5 w-5" />, disabled: true },
@@ -117,10 +131,10 @@ const mainMenuItems: MainMenuItem[] = [
   { title: "Sender Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, disabled: true },
   { title: "General Configuration", icon: <Settings className="h-5 w-5" />, expandable: true, subItems: generalConfigSubItems, moduleKey: "general-config" },
   { title: "Unified Inbox", icon: <Inbox className="h-5 w-5" />, disabled: true },
-  { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, disabled: true },
+  { title: "Chatii", icon: <MessageCircle className="h-5 w-5" />, expandable: true, subItems: chatiiSubItems, moduleKey: "chatii" },
 ];
 
-type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source" | "general-config";
+type ActiveModule = "user-management" | "messaging-service" | "campaign" | "data-source" | "general-config" | "chatii";
 
 export default function Documentation() {
   const [activeSection, setActiveSection] = useState<string>("");
@@ -145,7 +159,8 @@ export default function Documentation() {
       "messaging-service": 'Worksii-Messaging-Service-Manual.pdf',
       "campaign": 'Worksii-Campaign-Manual.pdf',
       "data-source": 'Worksii-Data-Source-Manual.pdf',
-      "general-config": 'Worksii-General-Configuration-Manual.pdf'
+      "general-config": 'Worksii-General-Configuration-Manual.pdf',
+      "chatii": 'Worksii-Chatii-Manual.pdf'
     };
 
     const opt = {
@@ -189,6 +204,12 @@ export default function Documentation() {
       docs: generalConfigDocs,
       title: "General Configuration",
       subtitle: "System-wide settings for wallet, email signatures, Firebase, and API access"
+    },
+    "chatii": {
+      subItems: chatiiSubItems,
+      docs: chatiiDocs,
+      title: "Chatii Module",
+      subtitle: "Managing WhatsApp and SMS conversations in the unified inbox"
     }
   };
 
@@ -395,7 +416,8 @@ export default function Documentation() {
                       "messaging-service": "ms-",
                       "campaign": "cp-",
                       "data-source": "ds-",
-                      "general-config": "gc-"
+                      "general-config": "gc-",
+                      "chatii": "ch-"
                     };
                     const id = prefixes[activeModule] + baseId;
                     return <h2 id={id} className="text-3xl font-bold tracking-tight mt-16 mb-6 pb-2 border-b border-gray-200 scroll-m-24 text-gray-900" {...props} />
